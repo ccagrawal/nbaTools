@@ -98,6 +98,11 @@ ScrapeContent <- function(endpoint, params, referer) {
   return(content(request, 'parsed'))
 }
 
+#' NBA Content to DataFrame
+#'
+#' @return data frame with info from stats.nba.com
+#' @importFrom util type.convert
+
 ContentToDataFrame <- function(content, ix) {
 
   if ('resultSets' %in% names(content)) {

@@ -19,3 +19,10 @@ SeasonToYear <- function(x) {
 kToday <- Sys.Date()
 kYear <- CurrentYear()
 kSeason <- YearToSeason(kYear)
+
+NameConvert <- function(name) {
+  name <- gsub(' Jr\\.', '', name)
+  name <- gsub(' III', '', name)
+  name <- sapply(name, function(x) paste0(substr(x, 1, 1), '.', substr(x, tail(gregexpr(' ', x)[[1]], 1), nchar(x))))
+  return(as.character(name))
+}
