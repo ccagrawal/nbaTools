@@ -79,7 +79,11 @@ GenerateParams <- function(param.keys, ...) {
   }
 
   for (k in names(kwargs)) {
-    params[[k]] <- kwargs[[k]]
+    if (k == 'Season') {
+      params[[k]] <- YearToSeason(kwargs[[k]])
+    } else {
+      params[[k]] <- kwargs[[k]]
+    }
   }
 
   return(params)
