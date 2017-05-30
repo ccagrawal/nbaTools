@@ -104,6 +104,7 @@ ScrapeContent <- function(endpoint, params, referer) {
 #' @importFrom utils type.convert
 
 ContentToDataFrame <- function(content, ix) {
+  options(stringsAsFactors = FALSE)
 
   if ('resultSets' %in% names(content)) {
     content <- content$resultSets
@@ -120,7 +121,6 @@ ContentToDataFrame <- function(content, ix) {
   data <- content$rowSet
   data <- lapply(data, lapply, function(x) ifelse(is.null(x), NA, x))   # Convert nulls to NAs
   data <- data.frame(matrix(unlist(data), nrow = length(data), byrow = TRUE)) # Turn list to data frame
-
   colnames(data) <- content$headers
   data[] <- lapply(data, type.convert, as.is = TRUE)
 

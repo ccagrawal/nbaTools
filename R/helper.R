@@ -1,5 +1,3 @@
-options(stringsAsFactors = FALSE)
-
 CurrentYear <- function() {
   if (as.numeric(format(Sys.Date(), "%m")) > 9) {
     return(as.numeric(format(Sys.Date(), "%Y")) + 1)
