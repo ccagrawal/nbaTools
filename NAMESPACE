@@ -2,6 +2,7 @@
 
 export(GetPlayerStats)
 export(GetTeamStats)
+export(GetTrackingStats)
 importFrom(httr,GET)
 importFrom(httr,add_headers)
 importFrom(httr,content)
