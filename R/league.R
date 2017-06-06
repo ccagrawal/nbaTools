@@ -1,4 +1,4 @@
-#' Team Stats.
+#' Team Stats
 #'
 #' @return data frame with stats for all teams
 #' @keywords team
@@ -24,7 +24,7 @@ GetTeamStats <- function(...) {
   return(GetNBAData(endpoint, referer, ix, param.keys, ...))
 }
 
-#' Player Stats.
+#' Player Stats
 #'
 #' @return data frame with stats for all players
 #' @keywords player
@@ -69,8 +69,8 @@ GetTrackingStats <- function(...) {
   param.keys <- c('College', 'Conference', 'Country', 'DateFrom', 'DateTo', 'Division',
                   'DraftPick', 'GameScope', 'Height', 'LastNGames',
                   'LeagueID', 'Location', 'Month', 'OpponentTeamID',
-                  'Outcome', 'PORound', 'PerMode', 'Period',
-                  'PlayerExperience', 'PlayerOrTeam', 'PlayerPosition', 'PtMeasureType', 'Season',
+                  'Outcome', 'PORound', 'PerMode', 'Period', 'PlayerExperience',
+                  'PlayerOrTeam', 'PlayerPosition', 'PtMeasureType', 'Season',
                   'SeasonSegment', 'SeasonType', 'StarterBench',
                   'TeamID', 'VsConference', 'VsDivision', 'Weight')
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/league.R
 \name{GetPlayerStats}
 \alias{GetPlayerStats}
-\title{Player Stats.}
+\title{Player Stats}
 \usage{
 GetPlayerStats(...)
 }
@@ -10,7 +10,7 @@ GetPlayerStats(...)
 data frame with stats for all players
 }
 \description{
-Player Stats.
+Player Stats
 }
 \examples{
 GetPlayerStats(SeasonType = 'Playoffs')
