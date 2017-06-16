@@ -13,7 +13,3 @@ YearToSeason <- function(x) {
 SeasonToYear <- function(x) {
   as.numeric(substring(x, 1, 4)) + 1
 }
-
-kToday <- Sys.Date()
-kYear <- CurrentYear()
-kSeason <- YearToSeason(kYear)

@@ -2,33 +2,40 @@
 #'
 #' @return data frame with stats for all teams
 #' @keywords team
-#' @importFrom httr GET content add_headers
 #' @export
 #' @examples
 #' GetTeamStats(SeasonType = 'Playoffs')
 
-GetTeamStats <- function(...) {
+GetTeamStats <- function(source = 'NBA', ...) {
 
-  endpoint <- 'leaguedashteamstats'
-  referer <- 'teams/traditional'
-  ix <- 1
+  if (source == 'NBA') {
+    endpoint <- 'leaguedashteamstats'
+    referer <- 'teams/traditional'
+    ix <- 1
 
-  param.keys <- c('Conference', 'DateFrom', 'DateTo', 'Division', 'GameScope',
-                  'GameSegment', 'LastNGames', 'LeagueID', 'Location',
-                  'MeasureType', 'Month', 'OpponentTeamID', 'Outcome', 'PORound',
-                  'PaceAdjust', 'PerMode', 'Period', 'PlayerExperience',
-                  'PlayerPosition', 'PlusMinus', 'Rank', 'Season', 'SeasonSegment',
-                  'SeasonType', 'ShotClockRange', 'StarterBench', 'TeamID',
-                  'VsConference', 'VsDivision')
+    param.keys <- c('Conference', 'DateFrom', 'DateTo', 'Division', 'GameScope',
+                    'GameSegment', 'LastNGames', 'LeagueID', 'Location',
+                    'MeasureType', 'Month', 'OpponentTeamID', 'Outcome', 'PORound',
+                    'PaceAdjust', 'PerMode', 'Period', 'PlayerExperience',
+                    'PlayerPosition', 'PlusMinus', 'Rank', 'Season', 'SeasonSegment',
+                    'SeasonType', 'ShotClockRange', 'StarterBench', 'TeamID',
+                    'VsConference', 'VsDivision')
 
-  return(GetNBAData(endpoint, referer, ix, param.keys, ...))
+  } else if (source == 'BRef') {
+    endpoint <- 'leagues/NBA_Season.html'
+    referer <- NA
+    ix <- 1
+
+    param.keys <- c('Season')
+  }
+
+  return(GetData(endpoint, referer, ix, param.keys, source, ...))
 }
 
 #' Player Stats
 #'
 #' @return data frame with stats for all players
 #' @keywords player
-#' @importFrom httr GET content add_headers
 #' @export
 #' @examples
 #' GetPlayerStats(SeasonType = 'Playoffs')
@@ -47,7 +54,7 @@ GetPlayerStats <- function(...) {
                   'SeasonSegment', 'SeasonType', 'ShotClockRange', 'StarterBench',
                   'TeamID', 'VsConference', 'VsDivision', 'Weight')
 
-  return(GetNBAData(endpoint, referer, ix, param.keys, ...))
+  return(GetNBAData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
 
 
@@ -55,7 +62,6 @@ GetPlayerStats <- function(...) {
 #'
 #' @return data frame with tracking stats for all players or all teams
 #' @keywords player team tracking
-#' @importFrom httr GET content add_headers
 #' @export
 #' @examples
 #' GetTrackingStats(PlayerOrTeam = 'Team')
@@ -74,5 +80,5 @@ GetTrackingStats <- function(...) {
                   'SeasonSegment', 'SeasonType', 'StarterBench',
                   'TeamID', 'VsConference', 'VsDivision', 'Weight')
 
-  return(GetNBAData(endpoint, referer, ix, param.keys, ...))
+  return(GetNBAData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
