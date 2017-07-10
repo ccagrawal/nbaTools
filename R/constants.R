@@ -37,6 +37,7 @@ kDefaultParams = list(
     Country = '',
     DateFrom = '',
     DateTo = '',
+    DefenseCategory = '3 Pointers',
     Direction = 'DESC',
     Division = '',
     DraftPick = '',
@@ -51,6 +52,7 @@ kDefaultParams = list(
     Height = '',
     LastNGames = 0,
     League = '00',
+    LeagueID = '00',
     Location = '',
     MeasureType = 'Base',
     Month = 0,
@@ -114,6 +116,7 @@ GenerateParams <- function(param.keys, source = 'NBA', ...) {
 
 #' @importFrom rvest %>% html_nodes html_text
 #' @importFrom xml2 read_html
+#' @importFrom httr GET content add_headers
 
 ScrapeContent <- function(endpoint, params, referer, source = 'NBA') {
   headers <- kHeaders[[source]]
@@ -142,13 +145,12 @@ ScrapeContent <- function(endpoint, params, referer, source = 'NBA') {
       paste(collapse = '') %>%    # collapse to a single string
       read_html()
 
-    # content <- rawToChar(request$content)
-    # content <- gsub('<!--([.]*)-->', '\\1', content)
+    content <- rawToChar(request$content)
+    content <- gsub('<!--(.*)-->', '\\1', content)
     return(content)
   }
 }
 
-#' @importFrom rvest %>% html_nodes html_table
 #' @importFrom utils type.convert
 
 ContentToDataFrame <- function(content, ix, source = 'NBA') {
@@ -173,10 +175,9 @@ ContentToDataFrame <- function(content, ix, source = 'NBA') {
     colnames(data) <- content$headers
 
   } else if (source == 'BRef') {
-    data <- content %>%
-      html_node(ix) %>%
-      html_table()
-
+    # data <- content %>%
+    #   html_node(ix) %>%
+    #   html_table()
 
     data <- readHTMLTable(content, header = FALSE)[[ix]]
   }

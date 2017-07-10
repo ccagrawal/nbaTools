@@ -54,7 +54,7 @@ GetPlayerStats <- function(...) {
                   'SeasonSegment', 'SeasonType', 'ShotClockRange', 'StarterBench',
                   'TeamID', 'VsConference', 'VsDivision', 'Weight')
 
-  return(GetNBAData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
+  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
 
 
@@ -80,5 +80,29 @@ GetTrackingStats <- function(...) {
                   'SeasonSegment', 'SeasonType', 'StarterBench',
                   'TeamID', 'VsConference', 'VsDivision', 'Weight')
 
-  return(GetNBAData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
+  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
+}
+
+#' Defense Stats
+#'
+#' @return data frame with defensive stats for all players
+#' @keywords player
+#' @export
+#' @examples
+#' GetPlayerDefenseStats(SeasonType = 'Playoffs')
+
+GetPlayerDefenseStats <- function(...) {
+
+  endpoint <- 'leaguedashptdefend'
+  referer <- 'players/defense-dash-3pt'
+  ix <- 1
+
+  param.keys <- c('College', 'Conference', 'Country', 'DateFrom', 'DateTo',
+                  'DefenseCategory', 'Division', 'DraftPick', 'DraftYear', 'GameSegment',
+                  'Height', 'LastNGames', 'LeagueID', 'Location', 'Month', 'OpponentTeamID',
+                  'Outcome', 'PORound', 'PerMode', 'Period', 'PlayerExperience',
+                  'PlayerPosition', 'Season', 'SeasonSegment', 'SeasonType', 'StarterBench',
+                  'TeamID', 'VsConference', 'VsDivision', 'Weight')
+
+  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }

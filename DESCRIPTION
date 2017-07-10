@@ -16,7 +16,7 @@ Imports: httr
 RoxygenNote: 6.0.1.9000
 Collate: 
     'helper.R'
-    'constants_nba.R'
+    'constants.R'
     'league.R'
     'player.R'
     'team.R'
