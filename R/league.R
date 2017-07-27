@@ -69,7 +69,7 @@ GetPlayerStats <- function(...) {
 GetTrackingStats <- function(...) {
 
   endpoint <- 'leaguedashptstats'
-  referer <- 'players/catch-shoot/'
+  referer <- 'players/catch-shoot'
   ix <- 1
 
   param.keys <- c('College', 'Conference', 'Country', 'DateFrom', 'DateTo', 'Division',
@@ -81,6 +81,25 @@ GetTrackingStats <- function(...) {
                   'TeamID', 'VsConference', 'VsDivision', 'Weight')
 
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
+}
+
+#' Play Type Stats
+#'
+#' @return data frame with play type stats for all players or all teams
+#' @keywords player team play type
+#' @export
+#' @examples
+#' GetPlayTypeStats(category = 'Isolation')
+
+GetPlayTypeStats <- function(...) {
+
+  endpoint <- 'player/'
+  referer <- 'players/transition'
+  ix <- 1
+
+  param.keys <- c('category', 'limit', 'names', 'q', 'season', 'seasonType')
+
+  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA.Synergy', ...))
 }
 
 #' Defense Stats

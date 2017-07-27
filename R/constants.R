@@ -6,11 +6,19 @@ kSeason <- YearToSeason(kYear)
 
 kBaseURL <- list(
   'NBA' = 'http://stats.nba.com/stats/%endpoint%',
+  'NBA.Synergy' = 'http://stats-prod.nba.com/wp-json/statscms/v1/synergy/%endpoint%',
   'BRef' = 'http://www.basketball-reference.com/%endpoint%'
 )
 
 kHeaders <- list(
   'NBA' = list(
+    'Accept-Language' = 'en-US,en;q=0.8,af;q=0.6',
+    'Referer' = 'http://stats.nba.com/%referer%/',
+    'User-Agent' = paste('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5)',
+                         'AppleWebKit/537.36 (KHTML, like Gecko)',
+                         'Chrome/57.0.2987.133 Safari/537.36')
+  ),
+  'NBA.Synergy' = list(
     'Accept-Language' = 'en-US,en;q=0.8,af;q=0.6',
     'Referer' = 'http://stats.nba.com/%referer%/',
     'User-Agent' = paste('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5)',
@@ -89,6 +97,14 @@ kDefaultParams = list(
     VsDivision = '',
     Weight = ''
   ),
+  'NBA.Synergy' = list(
+    category = 'Transition',
+    limit = 500,
+    names = 'offensive',
+    q = 2501745,
+    season = kYear - 1,
+    seasonType = 'Reg'
+  ),
   'BRef' = list(
     TeamID = 'HOU',
     Season = kYear
@@ -106,6 +122,8 @@ GenerateParams <- function(param.keys, source = 'NBA', ...) {
   for (k in names(kwargs)) {
     if (k == 'Season') {
       params[[k]] <- YearToSeason(kwargs[[k]])
+    } else if (k == 'season') {
+      params[[k]] <- kwargs[[k]] - 1
     } else {
       params[[k]] <- kwargs[[k]]
     }
@@ -114,18 +132,16 @@ GenerateParams <- function(param.keys, source = 'NBA', ...) {
   return(params)
 }
 
-#' @importFrom rvest %>% html_nodes html_text
-#' @importFrom xml2 read_html
 #' @importFrom httr GET content add_headers
 
 ScrapeContent <- function(endpoint, params, referer, source = 'NBA') {
   headers <- kHeaders[[source]]
 
-  if (source == 'NBA') {
+  if (source %in% c('NBA', 'NBA.Synergy')) {
     headers['Referer'] <- gsub('%referer%', referer, headers['Referer'])
 
     request <- GET(
-      url = gsub('%endpoint%', endpoint, kBaseURL[['NBA']]),
+      url = gsub('%endpoint%', endpoint, kBaseURL[[source]]),
       query = params,
       do.call(add_headers, headers)
     )
@@ -133,21 +149,21 @@ ScrapeContent <- function(endpoint, params, referer, source = 'NBA') {
     return(content(request, 'parsed'))
 
   } else if (source == 'BRef') {
-    url <- gsub('%endpoint%', endpoint, kBaseURL[['BRef']])
+    url <- gsub('%endpoint%', endpoint, kBaseURL[[source]])
 
     for (k in names(params)) {
       url <- gsub(k, params[[k]], url)
     }
 
-    content <- read_html(url)
-    content <- content %>% html_nodes(xpath = '//comment()') %>%    # select comment nodes
-      html_text() %>%             # extract comment text
-      paste(collapse = '') %>%    # collapse to a single string
-      read_html()
-
-    content <- rawToChar(request$content)
-    content <- gsub('<!--(.*)-->', '\\1', content)
-    return(content)
+    # content <- read_html(url)
+    # content <- content %>% html_nodes(xpath = '//comment()') %>%    # select comment nodes
+    #   html_text() %>%             # extract comment text
+    #   paste(collapse = '') %>%    # collapse to a single string
+    #   read_html()
+    #
+    # content <- rawToChar(request$content)
+    # content <- gsub('<!--(.*)-->', '\\1', content)
+    # return(content)
   }
 }
 
@@ -174,15 +190,22 @@ ContentToDataFrame <- function(content, ix, source = 'NBA') {
     data <- data.frame(matrix(unlist(data), nrow = length(data), byrow = TRUE)) # Turn list to data frame
     colnames(data) <- content$headers
 
+    data[] <- lapply(data, type.convert, as.is = TRUE)
+
+  } else if (source == 'NBA.Synergy') {
+    if ('results' %in% names(content)) {
+      data <- do.call(rbind, lapply(content$results, data.frame))
+    } else {
+      stop('Invalid stats.nba.com content provided.')
+    }
   } else if (source == 'BRef') {
     # data <- content %>%
     #   html_node(ix) %>%
     #   html_table()
 
-    data <- readHTMLTable(content, header = FALSE)[[ix]]
+    # data <- readHTMLTable(content, header = FALSE)[[ix]]
   }
 
-  data[] <- lapply(data, type.convert, as.is = TRUE)
   return(data)
 }
 

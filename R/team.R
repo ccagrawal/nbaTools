@@ -18,7 +18,7 @@ GetTeamDashboard <- function(source = 'NBA', endpoint = '', ix = 1, ...) {
 #' @keywords team on-off
 #' @export
 #' @examples
-#' GetTeamPlayerOnOffDetails(SeasonType = 'Playoffs')
+#' GetTeamPlayerOnOffDetails(TeamID = '1610612756')
 
 GetTeamPlayerOnOffDetails <- function(...) {
   endpoint <- 'teamplayeronoffdetails'
@@ -27,4 +27,30 @@ GetTeamPlayerOnOffDetails <- function(...) {
   off <- GetTeamDashboard(source = 'NBA', endpoint = endpoint, ix = 3, ...)
 
   return(rbind(on, off))
+}
+
+#' Team Dashboard by General Splits
+#'
+#' @return data frame with team information by a variety of splits
+#' @keywords team dashboard splits
+#' @export
+#' @examples
+#' GetTeamGeneralSplits(split = 'location', TeamID = '1610612756')
+
+GetTeamGeneralSplits <- function(split = 'location', ...) {
+  endpoint <- 'teamdashboardbygeneralsplits'
+
+  if (split == 'location') {
+    ix <- 2
+  } else if (split == 'wins/losses') {
+    ix <- 3
+  } else if (split == 'monthly') {
+    ix <- 4
+  } else if (split == 'pre/post all-star') {
+    ix <- 5
+  } else if (split == 'days rest') {
+    ix <- 6
+  }
+
+  return(GetTeamDashboard(source = 'NBA', endpoint = endpoint, ix = ix, ...))
 }

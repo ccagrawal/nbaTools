@@ -13,7 +13,7 @@ data frame with on-off stats for players on a team
 Team On Off Details
 }
 \examples{
-GetTeamPlayerOnOffDetails(SeasonType = 'Playoffs')
+GetTeamPlayerOnOffDetails(TeamID = '1610612756')
 }
 \keyword{on-off}
 \keyword{team}
