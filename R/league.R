@@ -93,8 +93,15 @@ GetTrackingStats <- function(...) {
 
 GetPlayTypeStats <- function(...) {
 
-  endpoint <- 'player/'
-  referer <- 'players/transition'
+  kwargs <- list(...)
+  if (('type' %in% names(kwargs)) && (kwargs[['type']] == 'team')) {
+    endpoint <- 'team/'
+    referer <- 'teams/transition'
+  } else {
+    endpoint <- 'player/'
+    referer <- 'players/transition'
+  }
+
   ix <- 1
 
   param.keys <- c('category', 'limit', 'names', 'q', 'season', 'seasonType')
