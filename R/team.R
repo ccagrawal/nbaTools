@@ -54,3 +54,30 @@ GetTeamGeneralSplits <- function(split = 'location', ...) {
 
   return(GetTeamDashboard(source = 'NBA', endpoint = endpoint, ix = ix, ...))
 }
+
+
+#' Team Shot Dashboard
+#'
+#' @return data frame with team information by a variety of splits
+#' @keywords team shot dashboard
+#' @export
+#' @examples
+#' GetTeamShotDashboard(split = 'location', TeamID = '1610612756')
+
+GetTeamGeneralSplits <- function(split = 'location', ...) {
+  endpoint <- 'teamdashptshots'
+
+  if (split == 'shot clock') {
+    ix <- 2
+  } else if (split == 'dribble') {
+    ix <- 3
+  } else if (split == 'closest defender') {
+    ix <- 4
+  } else if (split == 'closest defender long distance') {
+    ix <- 5
+  } else if (split == 'touch time') {
+    ix <- 6
+  }
+
+  return(GetTeamDashboard(source = 'NBA', endpoint = endpoint, ix = ix, ...))
+}
