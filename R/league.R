@@ -57,6 +57,30 @@ GetPlayerStats <- function(...) {
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
 
+#' Lineup Stats
+#'
+#' @return data frame with stats for all lineups
+#' @keywords lineup
+#' @export
+#' @examples
+#' GetLineupStats(SeasonType = 'Playoffs')
+
+GetLineupStats <- function(...) {
+
+  endpoint <- 'leaguedashlineups'
+  referer <- 'lineups/advanced'
+  ix <- 1
+
+  param.keys <- c('Conference', 'DateFrom', 'DateTo', 'Division', 'GameID',
+                  'GameSegment', 'GroupQuantity', 'LastNGames', 'LeagueID',
+                  'Location', 'MeasureType', 'Month', 'OpponentTeamID', 'Outcome',
+                  'PORound', 'PaceAdjust', 'PerMode', 'Period', 'PlusMinus',
+                  'Rank', 'Season', 'SeasonSegment', 'SeasonType', 'ShotClockRange',
+                  'TeamID', 'VsConference', 'VsDivision')
+
+  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
+}
+
 
 #' Tracking Stats
 #'
@@ -91,10 +115,9 @@ GetTrackingStats <- function(...) {
 #' @examples
 #' GetPlayTypeStats(category = 'Isolation')
 
-GetPlayTypeStats <- function(...) {
+GetPlayTypeStats <- function(type = 'player', ...) {
 
-  kwargs <- list(...)
-  if (('type' %in% names(kwargs)) && (kwargs[['type']] == 'team')) {
+  if (type == 'team') {
     endpoint <- 'team/'
     referer <- 'teams/transition'
   } else {
@@ -103,7 +126,6 @@ GetPlayTypeStats <- function(...) {
   }
 
   ix <- 1
-
   param.keys <- c('category', 'limit', 'names', 'q', 'season', 'seasonType')
 
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA.Synergy', ...))
