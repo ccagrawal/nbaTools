@@ -64,7 +64,7 @@ GetTeamGeneralSplits <- function(split = 'location', ...) {
 #' @examples
 #' GetTeamShotDashboard(split = 'location', TeamID = '1610612756')
 
-GetTeamGeneralSplits <- function(split = 'location', ...) {
+GetTeamShotDashboard <- function(split = 'location', ...) {
   endpoint <- 'teamdashptshots'
 
   if (split == 'shot clock') {
