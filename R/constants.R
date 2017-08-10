@@ -195,6 +195,13 @@ ContentToDataFrame <- function(content, ix, source = 'NBA') {
   } else if (source == 'NBA.Synergy') {
     if ('results' %in% names(content)) {
       data <- do.call(rbind, lapply(content$results, data.frame))
+      
+      # Fix shifted play type tables
+      ix <- is.na(as.numeric(data$PlayerIDSID))
+      if (sum(ix) > 0) {
+        data[ix, 1:18] <- data[ix, c(13:18, 1:12)]
+      }
+      
     } else {
       stop('Invalid stats.nba.com content provided.')
     }

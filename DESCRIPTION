@@ -12,7 +12,11 @@ Depends: R (>= 3.3.2)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Imports: httr
+Imports:
+    grid,
+    httr,
+    png,
+    utils,
 RoxygenNote: 6.0.1.9000
 Collate: 
     'helper.R'

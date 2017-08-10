@@ -62,9 +62,9 @@ GetTeamGeneralSplits <- function(split = 'location', ...) {
 #' @keywords team shot dashboard
 #' @export
 #' @examples
-#' GetTeamShotDashboard(split = 'location', TeamID = '1610612756')
+#' GetTeamShotDashboard(split = 'shot clock', TeamID = '1610612756')
 
-GetTeamShotDashboard <- function(split = 'location', ...) {
+GetTeamShotDashboard <- function(split = 'shot clock', ...) {
   endpoint <- 'teamdashptshots'
 
   if (split == 'shot clock') {
@@ -77,7 +77,31 @@ GetTeamShotDashboard <- function(split = 'location', ...) {
     ix <- 5
   } else if (split == 'touch time') {
     ix <- 6
+  } else {
+    return(NA)
   }
 
   return(GetTeamDashboard(source = 'NBA', endpoint = endpoint, ix = ix, ...))
+}
+
+#' Get Team Logo
+#'
+#' @param team.id Team ID from ESPN (e.g. 'hou')
+#' @return team's logo
+#' @keywords picture team logo
+#' @importFrom png readPNG
+#' @importFrom grid rasterGrob
+#' @export
+#' @examples
+#' GetTeamLogo('hou')
+
+GetTeamLogo <- function(team.id) {
+
+  url <- gsub('###', team.id, 'http://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/###.png')
+  temp <- tempfile()
+  download.file(url, temp, mode = "wb")
+  pic <- readPNG(temp)
+  file.remove(temp)
+
+  return(rasterGrob(pic, interpolate = TRUE))
 }
