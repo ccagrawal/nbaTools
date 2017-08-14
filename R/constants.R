@@ -45,13 +45,15 @@ kDefaultParams = list(
     Country = '',
     DateFrom = '',
     DateTo = '',
+    DayOffset = 0,
     DefenseCategory = '3 Pointers',
     Direction = 'DESC',
     Division = '',
     DraftPick = '',
     DraftYear = '',
-    EndPeriod = 0,
-    EndRange = 0,
+    EndPeriod = 10,
+    EndRange = 55800,
+    gameDate = format(kToday, "%m/%d/%Y"),
     Game_Scope = '',
     GameID = '',
     GameScope = '',
@@ -78,7 +80,7 @@ kDefaultParams = list(
     PlayoffRound = 0,
     PlusMinus = 'N',
     PtMeasureType = 'SpeedDistance',
-    RangeType = 0,
+    RangeType = 2,
     Rank = 'N',
     RookieYear = '',
     Scope = 'S',
@@ -89,7 +91,7 @@ kDefaultParams = list(
     ShotClockRange = '',
     Sorter = 'PTS',
     StarterBench = '',
-    StartPeriod = 0,
+    StartPeriod = 1,
     StartRange = 0,
     StatCategory = 'PTS',
     TeamID = 0,
@@ -120,13 +122,24 @@ GenerateParams <- function(param.keys, source = 'NBA', ...) {
   }
 
   for (k in names(kwargs)) {
+
     if (k == 'Season') {
       params[[k]] <- YearToSeason(kwargs[[k]])
+
     } else if (k == 'season') {
       params[[k]] <- kwargs[[k]] - 1
+
+    } else if (k == 'Date') {
+      if (class(kwargs[[k]]) == 'character') {
+        kwargs[[k]] <- as.Date(kwargs[[k]])
+      }
+
+      params[['gameDate']] <- kwargs[[k]]
+
     } else {
       params[[k]] <- kwargs[[k]]
     }
+
   }
 
   return(params)
@@ -195,13 +208,13 @@ ContentToDataFrame <- function(content, ix, source = 'NBA') {
   } else if (source == 'NBA.Synergy') {
     if ('results' %in% names(content)) {
       data <- do.call(rbind, lapply(content$results, data.frame))
-      
+
       # Fix shifted play type tables
       ix <- is.na(as.numeric(data$PlayerIDSID))
       if (sum(ix) > 0) {
         data[ix, 1:18] <- data[ix, c(13:18, 1:12)]
       }
-      
+
     } else {
       stop('Invalid stats.nba.com content provided.')
     }

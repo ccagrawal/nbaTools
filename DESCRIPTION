@@ -21,6 +21,8 @@ RoxygenNote: 6.0.1.9000
 Collate: 
     'helper.R'
     'constants.R'
+    'game.R'
     'league.R'
     'player.R'
+    'scoreboard.R'
     'team.R'
