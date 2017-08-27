@@ -1,3 +1,22 @@
+#' Team game log
+#'
+#' @return data frame with game box scores for a team
+#' @keywords player
+#' @export
+#' @examples
+#' GetTeamGameLog(SeasonType = 'Playoffs', 'TeamID' = '1610612745')
+
+GetTeamGameLog <- function(...) {
+
+  endpoint <- 'teamgamelog'
+  referer <- 'team'
+  ix <- 1
+
+  param.keys <- c('DateFrom', 'DateTo', 'LeagueID', 'Season', 'SeasonType', 'TeamID')
+
+  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
+}
+
 GetTeamDashboard <- function(source = 'NBA', endpoint = '', ix = 1, ...) {
 
   if (source == 'NBA') {

@@ -8,7 +8,7 @@
 
 GetPlayByPlay <- function(...) {
 
-  endpoint <- 'playbyplayb2'
+  endpoint <- 'playbyplayv2'
   referer <- 'game'
   ix <- 1
 
@@ -17,4 +17,3 @@ GetPlayByPlay <- function(...) {
 
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
-

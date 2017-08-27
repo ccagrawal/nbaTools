@@ -57,6 +57,32 @@ GetPlayerStats <- function(...) {
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
 
+#' Player Clutch Stats
+#'
+#' @return data frame with stats for all players in the clutch
+#' @keywords player clutch
+#' @export
+#' @examples
+#' GetPlayerClutchStats(SeasonType = 'Playoffs')
+
+GetPlayerClutchStats <- function(...) {
+
+  endpoint <- 'leaguedashplayerclutch'
+  referer <- 'players/clutch-traditional'
+  ix <- 1
+
+  param.keys <- c('AheadBehind', 'ClutchTime', 'College', 'Conference', 'Country',
+                  'DateFrom', 'DateTo', 'Division', 'DraftPick', 'DraftYear',
+                  'GameScope', 'GameSegment', 'Height', 'LastNGames',
+                  'LeagueID', 'Location', 'MeasureType', 'Month', 'OpponentTeamID',
+                  'Outcome', 'PORound', 'PaceAdjust', 'PerMode', 'Period',
+                  'PlayerExperience', 'PlayerPosition', 'PlusMinus', 'PointDiff',
+                  'Rank', 'Season', 'SeasonSegment', 'SeasonType', 'ShotClockRange',
+                  'StarterBench', 'TeamID', 'VsConference', 'VsDivision', 'Weight')
+
+  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
+}
+
 #' Lineup Stats
 #'
 #' @return data frame with stats for all lineups
@@ -80,7 +106,6 @@ GetLineupStats <- function(...) {
 
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
-
 
 #' Tracking Stats
 #'

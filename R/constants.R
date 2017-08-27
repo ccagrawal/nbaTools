@@ -36,8 +36,8 @@ kHeaders <- list(
 
 kDefaultParams = list(
   'NBA' = list(
-    AheadBehind = '',
-    ClutchTime = '',
+    AheadBehind = 'Ahead or Behind',
+    ClutchTime = 'Last 5 Minutes',
     College = '',
     Conference = '',
     ContextMeasure = 'FGM',
@@ -79,6 +79,7 @@ kDefaultParams = list(
     PlayerScope = 'All Players',
     PlayoffRound = 0,
     PlusMinus = 'N',
+    PointDiff = 5,
     PtMeasureType = 'SpeedDistance',
     RangeType = 2,
     Rank = 'N',
