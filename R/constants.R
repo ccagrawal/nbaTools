@@ -201,6 +201,11 @@ ContentToDataFrame <- function(content, ix, source = 'NBA') {
 
     data <- content$rowSet
     data <- lapply(data, lapply, function(x) ifelse(is.null(x), NA, x))   # Convert nulls to NAs
+    
+    if (length(data) == 0) {
+      return(NA)
+    }
+    
     data <- data.frame(matrix(unlist(data), nrow = length(data), byrow = TRUE)) # Turn list to data frame
     colnames(data) <- content$headers
 
