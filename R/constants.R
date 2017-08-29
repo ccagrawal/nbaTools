@@ -114,6 +114,10 @@ kDefaultParams = list(
   )
 )
 
+CHAR.COLS <- c('Team_ID', 'TEAM_ID', 'Game_ID', 'GAME_ID', 'PLAYER1_ID', 
+               'PLAYER1_TEAM_ID', 'PLAYER2_ID', 'PLAYER2_TEAM_ID', 
+               'PLAYER3_ID', 'PLAYER3_TEAM_ID')
+
 GenerateParams <- function(param.keys, source = 'NBA', ...) {
   params <- list()
   kwargs <- list(...)
@@ -201,15 +205,21 @@ ContentToDataFrame <- function(content, ix, source = 'NBA') {
 
     data <- content$rowSet
     data <- lapply(data, lapply, function(x) ifelse(is.null(x), NA, x))   # Convert nulls to NAs
-    
+
     if (length(data) == 0) {
-      return(NA)
+      return(NULL)
     }
-    
+
     data <- data.frame(matrix(unlist(data), nrow = length(data), byrow = TRUE)) # Turn list to data frame
     colnames(data) <- content$headers
 
-    data[] <- lapply(data, type.convert, as.is = TRUE)
+    keep.char <- which(colnames(data) %in% CHAR.COLS)
+    if (length(keep.char) > 0) {
+      data[, -keep.char] <- lapply(data[, -keep.char], type.convert, as.is = TRUE)
+    } else {
+      data[] <- lapply(data, type.convert, as.is = TRUE)
+    }
+
 
   } else if (source == 'NBA.Synergy') {
     if ('results' %in% names(content)) {
