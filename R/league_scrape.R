@@ -4,7 +4,7 @@
 #' @keywords team
 #' @export
 #' @examples
-#' GetTeamStats(SeasonType = 'Playoffs')
+#' # GetTeamStats(SeasonType = 'Playoffs')
 
 GetTeamStats <- function(source = 'NBA', ...) {
 
@@ -38,7 +38,7 @@ GetTeamStats <- function(source = 'NBA', ...) {
 #' @keywords player
 #' @export
 #' @examples
-#' GetPlayerStats(SeasonType = 'Playoffs')
+#' # GetPlayerStats(SeasonType = 'Playoffs')
 
 GetPlayerStats <- function(...) {
 
@@ -63,7 +63,7 @@ GetPlayerStats <- function(...) {
 #' @keywords player clutch
 #' @export
 #' @examples
-#' GetPlayerClutchStats(SeasonType = 'Playoffs')
+#' # GetPlayerClutchStats(SeasonType = 'Playoffs')
 
 GetPlayerClutchStats <- function(...) {
 
@@ -89,7 +89,7 @@ GetPlayerClutchStats <- function(...) {
 #' @keywords lineup
 #' @export
 #' @examples
-#' GetLineupStats(SeasonType = 'Playoffs')
+#' # GetLineupStats(SeasonType = 'Playoffs')
 
 GetLineupStats <- function(...) {
 
@@ -113,7 +113,7 @@ GetLineupStats <- function(...) {
 #' @keywords player team tracking
 #' @export
 #' @examples
-#' GetTrackingStats(PlayerOrTeam = 'Team')
+#' # GetTrackingStats(PlayerOrTeam = 'Team')
 
 GetTrackingStats <- function(...) {
 
@@ -138,7 +138,7 @@ GetTrackingStats <- function(...) {
 #' @keywords player team play type
 #' @export
 #' @examples
-#' GetPlayTypeStats(category = 'Isolation')
+#' # GetPlayTypeStats(category = 'Isolation')
 
 GetPlayTypeStats <- function(type = 'player', ...) {
 
@@ -162,7 +162,7 @@ GetPlayTypeStats <- function(type = 'player', ...) {
 #' @keywords player
 #' @export
 #' @examples
-#' GetPlayerDefenseStats(SeasonType = 'Playoffs')
+#' # GetPlayerDefenseStats(SeasonType = 'Playoffs')
 
 GetPlayerDefenseStats <- function(...) {
 

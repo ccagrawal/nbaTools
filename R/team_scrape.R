@@ -4,15 +4,19 @@
 #' @keywords player
 #' @export
 #' @examples
-#' GetTeamGameLog(SeasonType = 'Playoffs', 'TeamID' = '1610612745')
+#' # GetTeamGameLog(SeasonType = 'Playoffs', 'TeamID' = '1610612745')
 
 GetTeamGameLog <- function(...) {
 
-  endpoint <- 'teamgamelog'
+  endpoint <- 'teamgamelogs'
   referer <- 'team'
   ix <- 1
 
-  param.keys <- c('DateFrom', 'DateTo', 'LeagueID', 'Season', 'SeasonType', 'TeamID')
+  param.keys <- c('DateFrom', 'DateTo', 'GameSegment', 'LastNGames', 'LeagueID',
+                  'Location', 'MeasureType', 'Month', 'OpponentTeamID', 'Outcome',
+                  'PORound', 'PaceAdjust', 'PerMode', 'Period', 'PlusMinus',
+                  'Race', 'Season', 'SeasonSegment', 'SeasonType', 'ShotClockRange',
+                  'TeamID', 'VsConfererence', 'VsDivision')
 
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
@@ -37,7 +41,7 @@ GetTeamDashboard <- function(source = 'NBA', endpoint = '', ix = 1, ...) {
 #' @keywords team on-off
 #' @export
 #' @examples
-#' GetTeamPlayerOnOffDetails(TeamID = '1610612756')
+#' # GetTeamPlayerOnOffDetails(TeamID = '1610612756')
 
 GetTeamPlayerOnOffDetails <- function(...) {
   endpoint <- 'teamplayeronoffdetails'
@@ -54,7 +58,7 @@ GetTeamPlayerOnOffDetails <- function(...) {
 #' @keywords team dashboard splits
 #' @export
 #' @examples
-#' GetTeamGeneralSplits(split = 'location', TeamID = '1610612756')
+#' # GetTeamGeneralSplits(split = 'location', TeamID = '1610612756')
 
 GetTeamGeneralSplits <- function(split = 'location', ...) {
   endpoint <- 'teamdashboardbygeneralsplits'
@@ -74,14 +78,13 @@ GetTeamGeneralSplits <- function(split = 'location', ...) {
   return(GetTeamDashboard(source = 'NBA', endpoint = endpoint, ix = ix, ...))
 }
 
-
 #' Team Shot Dashboard
 #'
 #' @return data frame with team information by a variety of splits
 #' @keywords team shot dashboard
 #' @export
 #' @examples
-#' GetTeamShotDashboard(split = 'shot clock', TeamID = '1610612756')
+#' # GetTeamShotDashboard(split = 'shot clock', TeamID = '1610612756')
 
 GetTeamShotDashboard <- function(split = 'shot clock', ...) {
   endpoint <- 'teamdashptshots'
@@ -108,11 +111,12 @@ GetTeamShotDashboard <- function(split = 'shot clock', ...) {
 #' @param team.id Team ID from ESPN (e.g. 'hou')
 #' @return team's logo
 #' @keywords picture team logo
+#' @importFrom utils download.file
 #' @importFrom png readPNG
 #' @importFrom grid rasterGrob
 #' @export
 #' @examples
-#' GetTeamLogo('hou')
+#' # GetTeamLogo('hou')
 
 GetTeamLogo <- function(team.id) {
 

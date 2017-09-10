@@ -4,7 +4,7 @@
 #' @keywords games
 #' @export
 #' @examples
-#' GetGames(Date = '2017-02-02')
+#' # GetGames(Date = '2017-02-02')
 
 GetGames <- function(...) {
 

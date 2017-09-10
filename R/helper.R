@@ -7,7 +7,11 @@ CurrentYear <- function() {
 }
 
 YearToSeason <- function(x) {
-  paste0(x - 1, '-', substring(x, 3, 4))
+  if (is.numeric(x)) {
+    paste0(x - 1, '-', substring(x, 3, 4))
+  } else {
+    return(x)
+  }
 }
 
 SeasonToYear <- function(x) {
