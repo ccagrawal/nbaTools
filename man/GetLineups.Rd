@@ -4,7 +4,7 @@
 \alias{GetLineups}
 \title{Lineups}
 \usage{
-GetLineups(GameID)
+GetLineups(game.id)
 }
 \value{
 Data frame with 5 man lineups with play-by-play from NBA.com
@@ -13,7 +13,7 @@ Data frame with 5 man lineups with play-by-play from NBA.com
 Lineups
 }
 \examples{
-# GetLineups(GameID = '0021300359')
+# GetLineups(game.id = '0021300359')
 }
 \keyword{lineups}
 \keyword{playbyplay}

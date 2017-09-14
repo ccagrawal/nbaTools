@@ -17,3 +17,7 @@ YearToSeason <- function(x) {
 SeasonToYear <- function(x) {
   as.numeric(substring(x, 1, 4)) + 1
 }
+
+TimeToSeconds <- function(x) {
+  return(sapply(strsplit(x, ":"), function(x) as.numeric(x[1]) * 60 + as.numeric(x[2])))
+}

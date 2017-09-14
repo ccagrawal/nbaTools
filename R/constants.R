@@ -1,5 +1,3 @@
-#' @include helper.R
-
 kToday <- Sys.Date()
 kYear <- CurrentYear()
 kSeason <- YearToSeason(kYear)
@@ -60,6 +58,7 @@ kDefaultParams = list(
     GameSegment = '',
     GroupQuantity = 5,
     Height = '',
+    IsOnlyCurrentSeason = 0,
     LastNGames = 0,
     League = '00',
     LeagueID = '00',
@@ -114,6 +113,8 @@ kDefaultParams = list(
   )
 )
 
-CHAR.COLS <- c('Team_ID', 'TEAM_ID', 'Game_ID', 'GAME_ID', 'PLAYER1_ID',
-               'PLAYER1_TEAM_ID', 'PLAYER2_ID', 'PLAYER2_TEAM_ID',
+CHAR.COLS <- c('Team_ID', 'TEAM_ID',
+               'Game_ID', 'GAME_ID',
+               'Player_ID', 'PLAYER_ID', 'PERSON_ID',
+               'PLAYER1_ID', 'PLAYER1_TEAM_ID', 'PLAYER2_ID', 'PLAYER2_TEAM_ID',
                'PLAYER3_ID', 'PLAYER3_TEAM_ID')

@@ -4,17 +4,35 @@
 #' @keywords lineups playbyplay
 #' @export
 #' @examples
-#' # GetLineups(GameID = '0021300359')
+#' # GetLineups(game.id = '0021300359')
 
-GetLineups <- function(GameID) {
+GetLineups <- function(game.id) {
 
   # Get play by play first
-  pbp <- GetPlayByPlay(GameID = GameID)
+  pbp <- GetPlayByPlay(GameID = game.id)
+  pbp <- pbp[-which(pbp$EVENTMSGTYPE == 18), ]
 
   # Add markers for when the 10 man lineups can change
   mark.periods <- c(1, which(pbp$EVENTMSGTYPE == 13 & pbp$EVENTMSGACTIONTYPE == 0))   # End of period
+  
+  # Check if duplicate "end of periods"
+  period.diffs <- diff(mark.periods)
+  while (sum(period.diffs == 1) > 0) {
+    bad.marker <- mark.periods[which(period.diffs == 1) + 1][1]
+    pbp <- pbp[-bad.marker, ]
+    row.names(pbp) <- 1:nrow(pbp)
+
+    mark.periods <- c(1, which(pbp$EVENTMSGTYPE == 13 & pbp$EVENTMSGACTIONTYPE == 0))   # End of period
+    period.diffs <- diff(mark.periods)
+  }
+  
   markers <- which(pbp$EVENTMSGTYPE == 8 & pbp$EVENTMSGACTIONTYPE == 0)  # Subs
 
+  # For some reason last play sometimes marked wrong
+  if ((max(mark.periods) + 20) < nrow(pbp)) {
+    mark.periods <- c(mark.periods, max(which(pbp$EVENTMSGTYPE == 18 & pbp$EVENTMSGACTIONTYPE == 0)))
+  }
+  
   # Group subs based on consecutive actions
   ranges <- list(markers[1])
   last <- markers[1]
@@ -44,50 +62,19 @@ GetLineups <- function(GameID) {
   # Go through substitutions and get preliminary lineups
   home.players <- .ProcessSubs(pbp, markers, mark.periods, ranges, 'Home')
   away.players <- .ProcessSubs(pbp, markers, mark.periods, ranges, 'Away')
+  
+  # Add players who played the entire quarter
+  home.players <- .AddFullQuarterPlayers(home.players, game.id, markers, mark.periods, home.id)
+  away.players <- .AddFullQuarterPlayers(away.players, game.id, markers, mark.periods, away.id)
 
-  # Get # players in each range; if not 10, then use the box score
-  i <- length(mark.periods)
-  num.players <- sapply(home.players, function(x) length(x)) + sapply(away.players, function(x) length(x))
-
-  while ((length(num.players[num.players != 10]) > 0) & (i > 1)) {
-
-    # Decrement the period
-    i <- i - 1
-
-    # Get box score for period and split into home and away
-    box.score <- GetBoxScore(GameID = GameID, RangeType = 1, StartPeriod = i, EndPeriod = i)
-
-    if (i <= 4) {
-      box.score <- box.score[box.score$MIN == '12:00', ]
-    } else {
-      box.score <- box.score[box.score$MIN == '5:00', ]
-    }
-
-    home.add <- box.score[box.score$TEAM_ID == home.id, 'PLAYER_ID']
-    away.add <- box.score[box.score$TEAM_ID == away.id, 'PLAYER_ID']
-
-    # Get range corresponding to period in players list
-    group.first <- length(markers[markers <= mark.periods[i]])
-    group.last <- length(markers[markers <= mark.periods[i + 1]]) - 1
-
-    # If home players haven't played in the quarter, add them to the whole thing
-    for (player in home.add) {
-      if (!(player %in% .GetPlayers(home.players, group.first, group.last))) {
-        home.players <- .AddPlayers(player, home.players, group.first, group.last)
-      }
-    }
-
-    # If away players haven't played in the quarter, add them to the whole thing
-    for (player in away.add) {
-      if (!(player %in% .GetPlayers(away.players, group.first, group.last))) {
-        away.players <- .AddPlayers(player, away.players, group.first, group.last)
-      }
-    }
-
-    # Update the player counts
-    num.players <- sapply(home.players, function(x) length(x)) + sapply(away.players, function(x) length(x))
-  }
-
+  # Sometimes the full quarter isn't the right length. Add those players back in
+  home.players <- .AddFullQuarterPlayersWrongTime(home.players, game.id, markers, mark.periods, home.id)
+  away.players <- .AddFullQuarterPlayersWrongTime(away.players, game.id, markers, mark.periods, away.id)
+  
+  # Sometimes the player isn't in the box score. Add players who had an action back in
+  home.players <- .AddPlayersNotInBoxScore(home.players, pbp, markers, mark.periods, home.id)
+  away.players <- .AddPlayersNotInBoxScore(away.players, pbp, markers, mark.periods, away.id)
+  
   pbp[, c('H1', 'H2', 'H3', 'H4', 'H5', 'A1', 'A2', 'A3', 'A4', 'A5')] <- NA
 
   # Add player ids into pbp
@@ -196,4 +183,150 @@ GetLineups <- function(GameID) {
     }
   }
   return(lineups)
+}
+
+# Input:    players - list of vectors of players in
+#           game.id - game ID to get box score
+#           markers - rows of pbp that signify changes
+#           mark.periods - rows of pbp for start and end of quarters
+#           team.id - id of team to match with box scores
+# Output:   List of arrays of players at each time
+.AddFullQuarterPlayers <- function(players, game.id, markers, mark.periods, team.id) {
+  
+  # Get # players in each range; if not 10, then use the box score
+  i <- length(mark.periods)
+  num.players <- sapply(players, function(x) length(x))
+  
+  # Add players who were in the entire quarter
+  while ((length(num.players[num.players != 5]) > 0) & (i > 1)) {
+    
+    # Decrement the period
+    i <- i - 1
+    
+    # Get box score for period and split into home and away
+    box.score <- GetBoxScore(GameID = game.id, RangeType = 1, StartPeriod = i, EndPeriod = i)
+    
+    if (i <= 4) {
+      box.score <- box.score[box.score$MIN == '12:00', ]
+    } else {
+      box.score <- box.score[box.score$MIN == '5:00', ]
+    }
+    
+    players.to.add <- box.score[box.score$TEAM_ID == team.id, 'PLAYER_ID']
+    
+    # Get range corresponding to period in players list
+    group.first <- length(markers[markers <= mark.periods[i]])
+    group.last <- length(markers[markers <= mark.periods[i + 1]]) - 1
+    
+    # If home players haven't played in the quarter, add them to the whole thing
+    for (player in players.to.add) {
+      if (!(player %in% .GetPlayers(players, group.first, group.last))) {
+        players <- .AddPlayers(player, players, group.first, group.last)
+      }
+    }
+    
+    # Update the player counts
+    num.players <- sapply(players, function(x) length(x))
+  }
+  
+  return(players)
+}
+
+# Input:    players - list of vectors of players in
+#           game.id - game ID to get box score
+#           markers - rows of pbp that signify changes
+#           mark.periods - rows of pbp for start and end of quarters
+#           team.id - id of team to match with box scores
+# Output:   List of arrays of players at each time
+.AddFullQuarterPlayersWrongTime <- function(players, game.id, markers, mark.periods, team.id) {
+  
+  # Get # players in each range; if not 10, then use the box score
+  i <- length(mark.periods)
+  num.players <- sapply(players, function(x) length(x))
+  
+  # Add players who were in the entire quarter
+  while ((length(num.players[num.players != 5]) > 0) & (i > 1)) {
+    
+    # Decrement the period
+    i <- i - 1
+    
+    # Get box score for period and split into home and away
+    box.score <- GetBoxScore(GameID = game.id, RangeType = 1, StartPeriod = i, EndPeriod = i)
+    
+    box.score$MIN <- TimeToSeconds(box.score$MIN)
+    max.time <- round(sum(box.score$MIN) / 10)
+    box.score <- box.score[box.score$MIN == max.time, ]
+    
+    players.to.add <- box.score[box.score$TEAM_ID == team.id, 'PLAYER_ID']
+    
+    # Get range corresponding to period in players list
+    group.first <- length(markers[markers <= mark.periods[i]])
+    group.last <- length(markers[markers <= mark.periods[i + 1]]) - 1
+    
+    # If home players haven't played in the quarter, add them to the whole thing
+    for (player in players.to.add) {
+      if (!(player %in% .GetPlayers(players, group.first, group.last))) {
+        players <- .AddPlayers(player, players, group.first, group.last)
+      }
+    }
+    
+    # Update the player counts
+    num.players <- sapply(players, function(x) length(x))
+  }
+  
+  return(players)
+}
+
+
+# Input:    players - list of vectors of players in
+#           pbp - NBA play by play data frame
+#           markers - rows of pbp that signify changes
+#           mark.periods - rows of pbp for start and end of quarters
+#           team.id - id of team to match with box scores
+# Output:   List of arrays of players at each time
+.AddPlayersNotInBoxScore <- function(players, pbp, markers, mark.periods, team.id) {
+  
+  # Get # players in each range; if not 10, then use the box score
+  i <- length(mark.periods)
+  num.players <- sapply(players, function(x) length(x))
+  
+  # Add players who were in the entire quarter
+  while ((length(num.players[num.players != 5]) > 0) & (i > 1)) {
+    
+    # Decrement the period
+    i <- i - 1
+    
+    # Get range corresponding to period in players list
+    group.first <- length(markers[markers <= mark.periods[i]])
+    group.last <- length(markers[markers <= mark.periods[i + 1]]) - 1
+    
+    q.players <- players[group.first:group.last]
+    q.num <- sapply(q.players, function(x) length(x))
+    
+    # If less than 5 players, find a missing player
+    if (mean(q.num) < 5) {
+      
+      # Get players we already have
+      existing.players <- unique(paste(unlist(q.players)))
+      
+      # Get plays with presence actions
+      actions <- pbp[mark.periods[i]:mark.periods[i + 1], ]
+      actions <- actions[!is.na(actions$PLAYER1_TEAM_ID) & (actions$PLAYER1_TEAM_ID == team.id), ]
+      actions <- actions[actions$EVENTMSGTYPE %in% c(1, 2, 4), ]
+      
+      potential.players <- unique(actions$PLAYER1_ID)
+      potential.players <- potential.players[!(potential.players %in% existing.players)]
+      
+      if (length(potential.players) == (5 - mean(q.num))) {
+        for (player in potential.players) {
+          players <- .AddPlayers(player, players, group.first, group.last)
+        }
+      }
+      
+      # Update the player counts
+      num.players <- sapply(players, function(x) length(x))
+    }
+  }
+  
+  return(players)
 }
