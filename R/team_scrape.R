@@ -15,7 +15,7 @@ GetTeamGameLog <- function(...) {
   param.keys <- c('DateFrom', 'DateTo', 'GameSegment', 'LastNGames', 'LeagueID',
                   'Location', 'MeasureType', 'Month', 'OpponentTeamID', 'Outcome',
                   'PORound', 'PaceAdjust', 'PerMode', 'Period', 'PlusMinus',
-                  'Race', 'Season', 'SeasonSegment', 'SeasonType', 'ShotClockRange',
+                  'Rank', 'Season', 'SeasonSegment', 'SeasonType', 'ShotClockRange',
                   'TeamID', 'VsConfererence', 'VsDivision')
 
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
@@ -127,4 +127,27 @@ GetTeamLogo <- function(team.id) {
   file.remove(temp)
 
   return(rasterGrob(pic, interpolate = TRUE))
+}
+
+#' Team player stats
+#'
+#' @return data frame with stats for players on a team
+#' @keywords player team
+#' @export
+#' @examples
+#' # GetTeamPlayerDashboard(SeasonType = 'Playoffs', 'TeamID' = '1610612745')
+
+GetTeamPlayerDashboard <- function(...) {
+  
+  endpoint <- 'teamplayerdashboard'
+  referer <- 'team'
+  ix <- 1
+  
+  param.keys <- c('DateFrom', 'DateTo', 'GameSegment', 'LastNGames', 'LeagueID',
+                  'Location', 'MeasureType', 'Month', 'OpponentTeamID', 'Outcome',
+                  'PORound', 'PaceAdjust', 'PerMode', 'Period', 'PlusMinus',
+                  'Rank', 'Season', 'SeasonSegment', 'SeasonType',
+                  'TeamID', 'VsConfererence', 'VsDivision')
+  
+  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
