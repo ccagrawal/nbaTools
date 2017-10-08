@@ -8,7 +8,7 @@ GenerateParams <- function(param.keys, source = 'NBA', ...) {
 
   for (k in names(kwargs)) {
 
-    if (k == 'Season') {
+    if ((k == 'Season') & (source == 'NBA')) {
       params[[k]] <- YearToSeason(kwargs[[k]])
 
     } else if (k == 'season') {
