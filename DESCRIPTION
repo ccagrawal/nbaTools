@@ -17,6 +17,7 @@ Imports:
     httr,
     png,
     utils,
+    XML,
 RoxygenNote: 6.0.1.9000
 Collate: 
     'helper.R'

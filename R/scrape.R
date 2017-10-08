@@ -59,7 +59,9 @@ ScrapeContent <- function(endpoint, params, referer, source = 'NBA') {
     #   paste(collapse = '') %>%    # collapse to a single string
     #   read_html()
 
+    request <- GET(url)
     content <- rawToChar(request$content)
+
     content <- gsub('<!--(.*)-->', '\\1', content)
     return(content)
   }
