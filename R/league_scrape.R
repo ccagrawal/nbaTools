@@ -40,21 +40,29 @@ GetTeamStats <- function(source = 'NBA', ...) {
 #' @examples
 #' # GetPlayerStats(SeasonType = 'Playoffs')
 
-GetPlayerStats <- function(...) {
+GetPlayerStats <- function(source = 'NBA', ...) {
 
-  endpoint <- 'leaguedashplayerstats'
-  referer <- 'players/traditional'
-  ix <- 1
+  if (source == 'NBA') {
+    endpoint <- 'leaguedashplayerstats'
+    referer <- 'players/traditional'
+    ix <- 1
 
-  param.keys <- c('College', 'Conference', 'Country', 'DateFrom', 'DateTo', 'Division',
-                  'DraftPick', 'GameScope', 'GameSegment', 'Height', 'LastNGames',
-                  'LeagueID', 'Location', 'MeasureType', 'Month', 'OpponentTeamID',
-                  'Outcome', 'PORound', 'PaceAdjust', 'PerMode', 'Period',
-                  'PlayerExperience', 'PlayerPosition', 'PlusMinus', 'Rank', 'Season',
-                  'SeasonSegment', 'SeasonType', 'ShotClockRange', 'StarterBench',
-                  'TeamID', 'VsConference', 'VsDivision', 'Weight')
+    param.keys <- c('College', 'Conference', 'Country', 'DateFrom', 'DateTo', 'Division',
+                    'DraftPick', 'GameScope', 'GameSegment', 'Height', 'LastNGames',
+                    'LeagueID', 'Location', 'MeasureType', 'Month', 'OpponentTeamID',
+                    'Outcome', 'PORound', 'PaceAdjust', 'PerMode', 'Period',
+                    'PlayerExperience', 'PlayerPosition', 'PlusMinus', 'Rank', 'Season',
+                    'SeasonSegment', 'SeasonType', 'ShotClockRange', 'StarterBench',
+                    'TeamID', 'VsConference', 'VsDivision', 'Weight')
+  } else if (source == 'BRef') {
+    endpoint <- 'leagues/NBA_<Season>_<MeasureType>.html'
+    referer <- ''
+    ix <- 1
 
-  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
+    param.keys <- c('Season', 'MeasureType')
+  }
+
+  return(GetData(endpoint, referer, ix, param.keys, source, ...))
 }
 
 #' Player Clutch Stats
@@ -176,6 +184,31 @@ GetPlayerDefenseStats <- function(...) {
                   'Outcome', 'PORound', 'PerMode', 'Period', 'PlayerExperience',
                   'PlayerPosition', 'Season', 'SeasonSegment', 'SeasonType', 'StarterBench',
                   'TeamID', 'VsConference', 'VsDivision', 'Weight')
+
+  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
+}
+
+#' Player shooting stats
+#'
+#' @return data frame with shooting stats for all players
+#' @keywords player shooting
+#' @export
+#' @examples
+#' # GetPlayerShootingStats(SeasonType = 'Playoffs')
+
+GetPlayerShootingStats <- function(...) {
+
+  endpoint <- 'leaguedashplayerptshot'
+  referer <- 'players/shots-touch-time'
+  ix <- 1
+
+  param.keys <- c('CloseDefDistRange', 'College', 'Conference', 'Country', 'DateFrom', 'DateTo',
+                  'Division', 'DraftPick', 'DraftYear', 'DribbleRange', 'GameScope', 'GameSegment',
+                  'GeneralRange', 'Height', 'LastNGames', 'LeagueID', 'Location', 'Month',
+                  'OpponentTeamID', 'Outcome', 'PORound', 'PaceAdjust', 'PerMode', 'Period',
+                  'PlayerExperience', 'PlayerPosition', 'PlusMinus', 'Rank', 'Season',
+                  'SeasonSegment', 'SeasonType', 'ShotClockRange', 'ShotDistRange', 'StarterBench',
+                  'TeamID', 'TouchTimeRange', 'VsConference', 'VsDivision', 'Weight')
 
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }

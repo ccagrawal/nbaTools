@@ -35,6 +35,7 @@ kHeaders <- list(
 kDefaultParams = list(
   'NBA' = list(
     AheadBehind = 'Ahead or Behind',
+    CloseDefDistRange = '',
     ClutchTime = 'Last 5 Minutes',
     College = '',
     Conference = '',
@@ -49,6 +50,7 @@ kDefaultParams = list(
     Division = '',
     DraftPick = '',
     DraftYear = '',
+    DribbleRange = '',
     EndPeriod = 10,
     EndRange = 55800,
     gameDate = format(kToday, "%m/%d/%Y"),
@@ -56,6 +58,7 @@ kDefaultParams = list(
     GameID = '',
     GameScope = '',
     GameSegment = '',
+    GeneralRange = '',
     GroupQuantity = 5,
     Height = '',
     IsOnlyCurrentSeason = 0,
@@ -89,12 +92,14 @@ kDefaultParams = list(
     SeasonSegment = '',
     SeasonType = 'Regular Season',
     ShotClockRange = '',
+    ShotDistRange = '',
     Sorter = 'PTS',
     StarterBench = '',
     StartPeriod = 1,
     StartRange = 0,
     StatCategory = 'PTS',
     TeamID = 0,
+    TouchTimeRange = '',
     VsConference = '',
     VsDivision = '',
     Weight = ''
@@ -109,12 +114,12 @@ kDefaultParams = list(
   ),
   'BRef' = list(
     TeamID = 'HOU',
-    Season = kYear
+    Season = kYear,
+    MeasureType = 'totals'
   )
 )
 
-CHAR.COLS <- c('Team_ID', 'TEAM_ID',
+CHAR.COLS <- c('Team_ID', 'TEAM_ID', 'PLAYER1_TEAM_ID', 'PLAYER2_TEAM_ID', 'PLAYER3_TEAM_ID',
+               'Player_ID', 'PLAYER_ID', 'PERSON_ID', 'PLAYER1_ID',  'PLAYER2_ID', 'PLAYER3_ID',
                'Game_ID', 'GAME_ID',
-               'Player_ID', 'PLAYER_ID', 'PERSON_ID',
-               'PLAYER1_ID', 'PLAYER1_TEAM_ID', 'PLAYER2_ID', 'PLAYER2_TEAM_ID',
-               'PLAYER3_ID', 'PLAYER3_TEAM_ID')
+               'Player', 'Pos', 'Tm')

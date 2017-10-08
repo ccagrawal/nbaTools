@@ -106,6 +106,29 @@ GetTeamShotDashboard <- function(split = 'shot clock', ...) {
   return(GetTeamDashboard(source = 'NBA', endpoint = endpoint, ix = ix, ...))
 }
 
+#' Team player stats
+#'
+#' @return data frame with stats for players on a team
+#' @keywords player team
+#' @export
+#' @examples
+#' # GetTeamPlayerDashboard(SeasonType = 'Playoffs', 'TeamID' = '1610612745')
+
+GetTeamPlayerDashboard <- function(...) {
+  
+  endpoint <- 'teamplayerdashboard'
+  referer <- 'team'
+  ix <- 2
+  
+  param.keys <- c('DateFrom', 'DateTo', 'GameSegment', 'LastNGames', 'LeagueID',
+                  'Location', 'MeasureType', 'Month', 'OpponentTeamID', 'Outcome',
+                  'PORound', 'PaceAdjust', 'PerMode', 'Period', 'PlusMinus',
+                  'Rank', 'Season', 'SeasonSegment', 'SeasonType',
+                  'TeamID', 'VsConference', 'VsDivision')
+  
+  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
+}
+
 #' Get Team Logo
 #'
 #' @param team.id Team ID from ESPN (e.g. 'hou')
@@ -119,35 +142,12 @@ GetTeamShotDashboard <- function(split = 'shot clock', ...) {
 #' # GetTeamLogo('hou')
 
 GetTeamLogo <- function(team.id) {
-
+  
   url <- gsub('###', team.id, 'http://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/###.png')
   temp <- tempfile()
   download.file(url, temp, mode = "wb")
   pic <- readPNG(temp)
   file.remove(temp)
-
+  
   return(rasterGrob(pic, interpolate = TRUE))
-}
-
-#' Team player stats
-#'
-#' @return data frame with stats for players on a team
-#' @keywords player team
-#' @export
-#' @examples
-#' # GetTeamPlayerDashboard(SeasonType = 'Playoffs', 'TeamID' = '1610612745')
-
-GetTeamPlayerDashboard <- function(...) {
-  
-  endpoint <- 'teamplayerdashboard'
-  referer <- 'team'
-  ix <- 1
-  
-  param.keys <- c('DateFrom', 'DateTo', 'GameSegment', 'LastNGames', 'LeagueID',
-                  'Location', 'MeasureType', 'Month', 'OpponentTeamID', 'Outcome',
-                  'PORound', 'PaceAdjust', 'PerMode', 'Period', 'PlusMinus',
-                  'Rank', 'Season', 'SeasonSegment', 'SeasonType',
-                  'TeamID', 'VsConfererence', 'VsDivision')
-  
-  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }

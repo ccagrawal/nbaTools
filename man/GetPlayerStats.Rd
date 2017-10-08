@@ -4,7 +4,7 @@
 \alias{GetPlayerStats}
 \title{Player Stats}
 \usage{
-GetPlayerStats(...)
+GetPlayerStats(source = "NBA", ...)
 }
 \value{
 data frame with stats for all players

@@ -50,7 +50,7 @@ ScrapeContent <- function(endpoint, params, referer, source = 'NBA') {
     url <- gsub('%endpoint%', endpoint, kBaseURL[[source]])
 
     for (k in names(params)) {
-      url <- gsub(k, params[[k]], url)
+      url <- gsub(paste0('<', k, '>'), params[[k]], url)
     }
 
     # content <- read_html(url)
@@ -58,14 +58,15 @@ ScrapeContent <- function(endpoint, params, referer, source = 'NBA') {
     #   html_text() %>%             # extract comment text
     #   paste(collapse = '') %>%    # collapse to a single string
     #   read_html()
-    #
-    # content <- rawToChar(request$content)
-    # content <- gsub('<!--(.*)-->', '\\1', content)
-    # return(content)
+
+    content <- rawToChar(request$content)
+    content <- gsub('<!--(.*)-->', '\\1', content)
+    return(content)
   }
 }
 
 #' @importFrom utils type.convert
+#' @importFrom XML readHTMLTable
 
 ContentToDataFrame <- function(content, ix, source = 'NBA') {
   options(stringsAsFactors = FALSE)
@@ -93,13 +94,6 @@ ContentToDataFrame <- function(content, ix, source = 'NBA') {
     data <- data.frame(matrix(unlist(data), nrow = length(data), byrow = TRUE)) # Turn list to data frame
     colnames(data) <- content$headers
 
-    keep.char <- which(colnames(data) %in% CHAR.COLS)
-    if (length(keep.char) > 0) {
-      data[, -keep.char] <- lapply(data[, -keep.char], type.convert, as.is = TRUE)
-    } else {
-      data[] <- lapply(data, type.convert, as.is = TRUE)
-    }
-
   } else if (source == 'NBA.Synergy') {
     if ('results' %in% names(content)) {
       data <- do.call(rbind, lapply(content$results, data.frame))
@@ -113,12 +107,23 @@ ContentToDataFrame <- function(content, ix, source = 'NBA') {
     } else {
       stop('Invalid stats.nba.com content provided.')
     }
+
   } else if (source == 'BRef') {
     # data <- content %>%
     #   html_node(ix) %>%
     #   html_table()
 
-    # data <- readHTMLTable(content, header = FALSE)[[ix]]
+    data <- readHTMLTable(content)[[ix]]
+    headers <- colnames(data)
+    dup.headers <- apply(data, 1, function(x) x == headers)
+    data <- data[-which(colSums(dup.headers) == ncol(data)), ]
+  }
+
+  keep.char <- which(colnames(data) %in% CHAR.COLS)
+  if (length(keep.char) > 0) {
+    data[, -keep.char] <- lapply(data[, -keep.char], type.convert, as.is = TRUE)
+  } else {
+    data[] <- lapply(data, type.convert, as.is = TRUE)
   }
 
   return(data)
