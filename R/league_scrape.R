@@ -212,3 +212,27 @@ GetPlayerShootingStats <- function(...) {
 
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
+
+#' Team shooting stats
+#'
+#' @return data frame with shooting stats for all teams
+#' @keywords team shooting
+#' @export
+#' @examples
+#' # GetTeamShootingStats(SeasonType = 'Playoffs')
+
+GetTeamShootingStats <- function(...) {
+
+  endpoint <- 'leaguedashteamshotlocations'
+  referer <- 'teams/shooting'
+  ix <- 1
+
+  param.keys <- c('Conference', 'DateFrom', 'DateTo', 'DistanceRange', 'Division', 'GameScope',
+                  'GameSegment', 'LastNGames', 'LeagueID', 'Location', 'MeasureType', 'Month',
+                  'OpponentTeamID', 'Outcome', 'PORound', 'PaceAdjust', 'PerMode', 'Period',
+                  'PlayerExperience', 'PlayerPosition', 'PlusMinus', 'Rank', 'Season',
+                  'SeasonSegment', 'SeasonType', 'ShotClockRange', 'StarterBench',
+                  'TeamID', 'VsConference', 'VsDivision')
+
+  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
+}

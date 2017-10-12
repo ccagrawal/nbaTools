@@ -47,6 +47,7 @@ kDefaultParams = list(
     DayOffset = 0,
     DefenseCategory = '3 Pointers',
     Direction = 'DESC',
+    DistanceRange = 'By Zone',
     Division = '',
     DraftPick = '',
     DraftYear = '',

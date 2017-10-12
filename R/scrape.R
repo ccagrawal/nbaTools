@@ -134,7 +134,7 @@ ContentToDataFrame <- function(content, ix, source = 'NBA') {
 GetData <- function(endpoint, referer, ix, param.keys, source = 'NBA', ...) {
   params <- GenerateParams(param.keys, source, ...)
   content <- ScrapeContent(endpoint, params, referer, source)
-  df <- ContentToDataFrame(content, ix, source)
+  df <- ContentToDataFrame(content, 1, source)
 
   Sys.sleep(1)
   return(df)
