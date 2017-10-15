@@ -65,6 +65,30 @@ GetPlayerStats <- function(source = 'NBA', ...) {
   return(GetData(endpoint, referer, ix, param.keys, source, ...))
 }
 
+#' Player Bio Stats
+#'
+#' @return data frame with bio stats for all players
+#' @keywords player bio
+#' @export
+#' @examples
+#' # GetPlayerBioStats(SeasonType = 'Playoffs')
+
+GetPlayerBioStats <- function(...) {
+
+  endpoint <- 'leaguedashplayerbiostats'
+  referer <- 'players/bio'
+  ix <- 1
+
+  param.keys <- c('College', 'Conference', 'Country', 'DateFrom', 'DateTo', 'Division',
+                  'DraftPick', 'DraftYear', 'GameScope', 'GameSegment', 'Height', 'LastNGames',
+                  'LeagueID', 'Location', 'Month', 'OpponentTeamID', 'Outcome', 'PORound',
+                  'PerMode', 'Period', 'PlayerExperience', 'PlayerPosition', 'Season',
+                  'SeasonSegment', 'SeasonType', 'ShotClockRange', 'StarterBench',
+                  'TeamID', 'VsConference', 'VsDivision', 'Weight')
+
+  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
+}
+
 #' Player Clutch Stats
 #'
 #' @return data frame with stats for all players in the clutch
@@ -233,6 +257,31 @@ GetTeamShootingStats <- function(...) {
                   'PlayerExperience', 'PlayerPosition', 'PlusMinus', 'Rank', 'Season',
                   'SeasonSegment', 'SeasonType', 'ShotClockRange', 'StarterBench',
                   'TeamID', 'VsConference', 'VsDivision')
+
+  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
+}
+
+
+#' Player Hustle Stats
+#'
+#' @return data frame with hustle stats for all players
+#' @keywords player hustle
+#' @export
+#' @examples
+#' # GetPlayerHustleStats(SeasonType = 'Playoffs')
+
+GetPlayerHustleStats <- function(...) {
+
+  endpoint <- 'leaguehustlestatsplayer'
+  referer <- 'players/hustle'
+  ix <- 1
+
+  param.keys <- c('College', 'Conference', 'Country', 'DateFrom', 'DateTo', 'Division',
+                  'DraftPick', 'DraftYear', 'GameScope', 'Height', 'LastNGames',
+                  'LeagueID', 'Location', 'Month', 'OpponentTeamID', 'Outcome',
+                  'PORound', 'PaceAdjust', 'PerMode', 'PlayerExperience', 'PlayerPosition',
+                  'PlusMinus', 'Rank', 'Season', 'SeasonSegment', 'SeasonType',
+                  'TeamID', 'VsConference', 'VsDivision', 'Weight')
 
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }

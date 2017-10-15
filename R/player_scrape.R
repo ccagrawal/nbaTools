@@ -27,7 +27,7 @@ GetPlayerIDs <- function(...) {
 
 GetPlayerGameLogs <- function(...) {
 
-  endpoint <- 'playergamelog'
+  endpoint <- 'playergamelogs'
   referer <- 'player'
   ix <- 1
 

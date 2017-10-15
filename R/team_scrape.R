@@ -115,17 +115,17 @@ GetTeamShotDashboard <- function(split = 'shot clock', ...) {
 #' # GetTeamPlayerDashboard(SeasonType = 'Playoffs', 'TeamID' = '1610612745')
 
 GetTeamPlayerDashboard <- function(...) {
-  
+
   endpoint <- 'teamplayerdashboard'
   referer <- 'team'
   ix <- 2
-  
+
   param.keys <- c('DateFrom', 'DateTo', 'GameSegment', 'LastNGames', 'LeagueID',
                   'Location', 'MeasureType', 'Month', 'OpponentTeamID', 'Outcome',
                   'PORound', 'PaceAdjust', 'PerMode', 'Period', 'PlusMinus',
                   'Rank', 'Season', 'SeasonSegment', 'SeasonType',
                   'TeamID', 'VsConference', 'VsDivision')
-  
+
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
 
@@ -142,12 +142,33 @@ GetTeamPlayerDashboard <- function(...) {
 #' # GetTeamLogo('hou')
 
 GetTeamLogo <- function(team.id) {
-  
+
   url <- gsub('###', team.id, 'http://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/###.png')
   temp <- tempfile()
   download.file(url, temp, mode = "wb")
   pic <- readPNG(temp)
   file.remove(temp)
-  
+
   return(rasterGrob(pic, interpolate = TRUE))
+}
+
+#' Team History
+#'
+#' @return data frame with historical records for franchise
+#' @keywords team history
+#' @export
+#' @examples
+#' # GetTeamHistory(TeamID = 'HOU')
+
+GetTeamHistory <- function(source = 'BRef', ...) {
+
+  if (source == 'BRef') {
+    endpoint <- 'teams/<TeamID>/'
+    referer <- ''
+    ix <- 1
+
+    param.keys <- c('TeamID')
+  }
+
+  return(GetData(endpoint, referer, ix, param.keys, source, ...))
 }

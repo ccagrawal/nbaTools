@@ -118,7 +118,10 @@ ContentToDataFrame <- function(content, ix, source = 'NBA') {
     data <- readHTMLTable(content)[[ix]]
     headers <- colnames(data)
     dup.headers <- apply(data, 1, function(x) x == headers)
-    data <- data[-which(colSums(dup.headers) == ncol(data)), ]
+
+    if (sum(dup.headers) > 0) {
+      data <- data[-which(colSums(dup.headers) == ncol(data)), ]
+    }
   }
 
   keep.char <- which(colnames(data) %in% CHAR.COLS)
@@ -134,7 +137,7 @@ ContentToDataFrame <- function(content, ix, source = 'NBA') {
 GetData <- function(endpoint, referer, ix, param.keys, source = 'NBA', ...) {
   params <- GenerateParams(param.keys, source, ...)
   content <- ScrapeContent(endpoint, params, referer, source)
-  df <- ContentToDataFrame(content, 1, source)
+  df <- ContentToDataFrame(content, ix, source)
 
   Sys.sleep(1)
   return(df)
