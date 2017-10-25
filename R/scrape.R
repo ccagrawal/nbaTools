@@ -120,7 +120,7 @@ ContentToDataFrame <- function(content, ix, source = 'NBA') {
     dup.headers <- apply(data, 1, function(x) x == headers)
 
     if (sum(dup.headers) > 0) {
-      data <- data[-which(colSums(dup.headers) == ncol(data)), ]
+      data <- data[-which(colSums(dup.headers) > 1), ]
     }
   }
 

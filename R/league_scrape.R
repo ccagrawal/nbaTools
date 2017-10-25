@@ -32,6 +32,33 @@ GetTeamStats <- function(source = 'NBA', ...) {
   return(GetData(endpoint, referer, ix, param.keys, source, ...))
 }
 
+#' Team Hustle Stats
+#'
+#' @return data frame with hustle stats for all teams
+#' @keywords team hustle
+#' @export
+#' @examples
+#' # GetTeamHustleStats(SeasonType = 'Playoffs')
+
+GetTeamHustleStats <- function(...) {
+
+  endpoint <- 'leaguehustlestatsteams'
+  referer <- 'teams/hustle'
+  ix <- 1
+
+  param.keys <- c('College', 'Conference', 'Country', 'DateFrom', 'DateTo', 'Division',
+                  'DraftPick', 'DraftYear', 'GameScope',
+                  'GameSegment', 'Height', 'LastNGames', 'LeagueID', 'Location',
+                  'Month', 'OpponentTeamID', 'Outcome', 'PORound',
+                  'PaceAdjust', 'PerMode', 'PlayerExperience',
+                  'PlayerPosition', 'PlusMinus', 'Rank', 'Season', 'SeasonSegment',
+                  'SeasonType', 'ShotClockRange', 'TeamID',
+                  'VsConference', 'VsDivision', 'Weight')
+
+  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
+}
+
+
 #' Player Stats
 #'
 #' @return data frame with stats for all players
@@ -282,6 +309,27 @@ GetPlayerHustleStats <- function(...) {
                   'PORound', 'PaceAdjust', 'PerMode', 'PlayerExperience', 'PlayerPosition',
                   'PlusMinus', 'Rank', 'Season', 'SeasonSegment', 'SeasonType',
                   'TeamID', 'VsConference', 'VsDivision', 'Weight')
+
+  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
+}
+
+
+#' Game Logs
+#'
+#' @return data frame with game logs for all players or teams
+#' @keywords gamelog
+#' @export
+#' @examples
+#' # GetGameLogs(SeasonType = 'Playoffs')
+
+GetGameLogs <- function(...) {
+
+  endpoint <- 'leaguegamelog'
+  referer <- 'players/boxscores'
+  ix <- 1
+
+  param.keys <- c('Counter', 'DateFrom', 'DateTo', 'Direction', 'LeagueID',
+                  'PlayerOrTeam', 'Season', 'SeasonType', 'Sorter')
 
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
