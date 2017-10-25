@@ -288,7 +288,6 @@ GetTeamShootingStats <- function(...) {
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
 
-
 #' Player Hustle Stats
 #'
 #' @return data frame with hustle stats for all players
@@ -313,7 +312,6 @@ GetPlayerHustleStats <- function(...) {
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
 
-
 #' Game Logs
 #'
 #' @return data frame with game logs for all players or teams
@@ -332,4 +330,44 @@ GetGameLogs <- function(...) {
                   'PlayerOrTeam', 'Season', 'SeasonType', 'Sorter')
 
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
+}
+
+#' RPM
+#'
+#' @return data frame with player RPMs
+#' @keywords player rpm
+#' @export
+#' @examples
+#' # GetRPM(year = 2017)
+
+GetRPM <- function(year = kYear) {
+
+  base.url <- paste0('http://espn.go.com/nba/statistics/rpm/_/year/', year, '/page/PPPP/sort/RPM')
+
+  continue <- TRUE
+  i <- 1
+  df <- data.frame()
+
+  # Loop through pages until we get to an empty page
+  while(continue) {
+    url <- gsub('PPPP', i, base.url)
+    table <- readHTMLTable(url)[[1]]
+
+    if (is.null(table)) {
+      continue <- FALSE
+    } else {
+      df <- rbind(df, table)
+      i <- i + 1
+    }
+  }
+
+  # Split up Name into Name and Position
+  df$POS <- gsub('.*, (.*)', '\\1', df$NAME)
+  df$NAME <- gsub('(.*),.*', '\\1', df$NAME)
+  df <- df[, c(2, 3, 10, 4:9)]
+
+  # Fix the column types
+  df[, -c(1:3)] <- lapply(df[, -c(1:3)], as.numeric)
+
+  return(df)
 }
