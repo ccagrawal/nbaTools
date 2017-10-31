@@ -314,20 +314,23 @@ GetPlayerHustleStats <- function(...) {
 
 #' Game Logs
 #'
-#' @return data frame with game logs for all players or teams
-#' @keywords gamelog
+#' @return data frame with game logs for all players
+#' @keywords player gamelog
 #' @export
 #' @examples
 #' # GetGameLogs(SeasonType = 'Playoffs')
 
 GetGameLogs <- function(...) {
 
-  endpoint <- 'leaguegamelog'
-  referer <- 'players/boxscores'
+  endpoint <- 'playergamelogs'
+  referer <- 'players/boxscores-traditional'
   ix <- 1
 
-  param.keys <- c('Counter', 'DateFrom', 'DateTo', 'Direction', 'LeagueID',
-                  'PlayerOrTeam', 'Season', 'SeasonType', 'Sorter')
+  param.keys <- c('DateFrom', 'DateTo', 'GameSegment', 'LastNGames', 'LeagueID',
+                  'Location', 'MeasureType', 'Month', 'OpponentTeamID', 'Outcome',
+                  'PORound', 'PaceAdjust', 'PerMode', 'Period', 'PlusMinus', 'Rank',
+                  'Season', 'SeasonSegment', 'SeasonType', 'ShotClockRange',
+                  'VsConference', 'VsDivision')
 
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
