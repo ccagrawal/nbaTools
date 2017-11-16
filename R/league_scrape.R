@@ -58,7 +58,6 @@ GetTeamHustleStats <- function(...) {
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
 
-
 #' Player Stats
 #'
 #' @return data frame with stats for all players

@@ -7,7 +7,7 @@
 GetGameLogs(...)
 }
 \value{
-data frame with game logs for all players or teams
+data frame with game logs for all players
 }
 \description{
 Game Logs
@@ -16,3 +16,4 @@ Game Logs
 # GetGameLogs(SeasonType = 'Playoffs')
 }
 \keyword{gamelog}
+\keyword{player}

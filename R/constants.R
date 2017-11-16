@@ -120,7 +120,7 @@ kDefaultParams = list(
   )
 )
 
-CHAR.COLS <- c('Team_ID', 'TEAM_ID', 'PLAYER1_TEAM_ID', 'PLAYER2_TEAM_ID', 'PLAYER3_TEAM_ID',
+CHAR.COLS <- c('Team_ID', 'TEAM_ID', 'TeamIDSID', 'PLAYER1_TEAM_ID', 'PLAYER2_TEAM_ID', 'PLAYER3_TEAM_ID',
                'Player_ID', 'PLAYER_ID', 'PERSON_ID', 'PLAYER1_ID',  'PLAYER2_ID', 'PLAYER3_ID',
                'Game_ID', 'GAME_ID',
                'Player', 'Pos', 'Tm')

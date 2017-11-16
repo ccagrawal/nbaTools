@@ -106,6 +106,8 @@ ContentToDataFrame <- function(content, ix, source = 'NBA') {
         data[ix, 1:18] <- data[ix, c(13:18, 1:12)]
       }
 
+      data[] <- lapply(data, as.character)
+
     } else {
       stop('Invalid stats.nba.com content provided.')
     }

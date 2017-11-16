@@ -38,3 +38,36 @@ GetPlayerGameLogs <- function(...) {
 
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
+
+#' Player year over year stats
+#'
+#' @return data frame with players yearly stats
+#' @keywords player game log
+#' @export
+#' @examples
+#' # GetPlayerYearByYearStats(PlayerID = '2544')
+
+GetPlayerYearByYearStats <- function(split = 'Advanced', ...) {
+
+  endpoint <- 'playerdashboardbyyearoveryear'
+  referer <- 'player'
+
+  param.keys <- c('DateFrom', 'DateTo', 'GameSegment', 'LastNGames', 'LeagueID', 'Location', 'MeasureType',
+                  'Month', 'OpponentTeamID', 'Outcome', 'PORound', 'PaceAdjust', 'PerMode', 'Period',
+                  'PlayerID', 'PlusMinus', 'Rank', 'Season', 'SeasonSegment', 'SeasonType', 'ShotClockRange',
+                  'Split', 'VsConference', 'VsDivision')
+
+  if (split == 'Traditional') {
+    ix <- 1
+  } else if (split == 'Advanced') {
+    ix <- 2
+  } else if (split == 'Misc') {
+    ix <- 3
+  } else if (split == 'Scoring') {
+    ix <- 4
+  } else if (split == 'Usage') {
+    ix <- 5
+  }
+
+  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
+}
