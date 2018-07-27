@@ -53,16 +53,10 @@ ScrapeContent <- function(endpoint, params, referer, source = 'NBA') {
       url <- gsub(paste0('<', k, '>'), params[[k]], url)
     }
 
-    # content <- read_html(url)
-    # content <- content %>% html_nodes(xpath = '//comment()') %>%    # select comment nodes
-    #   html_text() %>%             # extract comment text
-    #   paste(collapse = '') %>%    # collapse to a single string
-    #   read_html()
-
     request <- GET(url)
     content <- rawToChar(request$content)
 
-    content <- gsub('<!--(.*)-->', '\\1', content)
+    content <- gsub('<!--([(?!-->)]*)', '\\1', content)
     return(content)
   }
 }
@@ -82,7 +76,7 @@ ContentToDataFrame <- function(content, ix, source = 'NBA') {
       stop('Invalid stats.nba.com content provided.')
     }
 
-    if (!missing(ix)) {
+    if (!is.null(ix)) {
       content <- content[[ix]]
     }
 
@@ -93,8 +87,27 @@ ContentToDataFrame <- function(content, ix, source = 'NBA') {
       return(NULL)
     }
 
-    data <- data.frame(matrix(unlist(data), nrow = length(data), byrow = TRUE)) # Turn list to data frame
-    colnames(data) <- content$headers
+    data <- data.frame(matrix(unlist(data), nrow = length(data), byrow = TRUE))  # Turn list to data frame
+
+    if (class(content$headers[[1]]) == 'list') {
+      headers <- unlist(content$headers[[2]]$columnNames)
+      temp <- content$headers[[1]]
+
+      ix <- temp$columnsToSkip + 1
+      span <- temp$columnSpan
+
+      for (i in 1:length(temp$columnNames)) {
+        label <- temp$columnNames[[i]]
+        all.ix <- ix:(ix + span - 1)
+        headers[all.ix] <- paste0(label, '.', headers[all.ix])
+        ix <- ix + span
+      }
+
+    } else {
+      headers <- content$headers
+    }
+
+    colnames(data) <- headers
 
   } else if (source == 'NBA.Synergy') {
     if ('results' %in% names(content)) {
@@ -113,10 +126,6 @@ ContentToDataFrame <- function(content, ix, source = 'NBA') {
     }
 
   } else if (source == 'BRef') {
-    # data <- content %>%
-    #   html_node(ix) %>%
-    #   html_table()
-
     data <- readHTMLTable(content)[[ix]]
     headers <- colnames(data)
     dup.headers <- apply(data, 1, function(x) x == headers)

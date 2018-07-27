@@ -10,25 +10,28 @@ kBaseURL <- list(
 
 kHeaders <- list(
   'NBA' = list(
+    'Accept' = 'application/json, text/plain, */*',
     'Accept-Language' = 'en-US,en;q=0.8,af;q=0.6',
     'Referer' = 'http://stats.nba.com/%referer%/',
-    'User-Agent' = paste('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5)',
+    'User-Agent' = paste('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6)',
                          'AppleWebKit/537.36 (KHTML, like Gecko)',
-                         'Chrome/57.0.2987.133 Safari/537.36')
+                         'Chrome/67.0.3396.99 Safari/537.36')
   ),
   'NBA.Synergy' = list(
+    'Accept' = 'application/json, text/plain, */*',
     'Accept-Language' = 'en-US,en;q=0.8,af;q=0.6',
     'Referer' = 'http://stats.nba.com/%referer%/',
-    'User-Agent' = paste('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5)',
+    'User-Agent' = paste('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6)',
                          'AppleWebKit/537.36 (KHTML, like Gecko)',
-                         'Chrome/57.0.2987.133 Safari/537.36')
+                         'Chrome/67.0.3396.99 Safari/537.36')
   ),
   'BRef' = list(
+    'Accept' = 'application/json, text/plain, */*',
     'Accept-Language' = 'en-US,en;q=0.8,af;q=0.6',
-    'Referer' = 'http://www.basketball-reference.com/',
-    'User-Agent' = paste('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5)',
+    'Referer' = 'http://stats.nba.com/%referer%/',
+    'User-Agent' = paste('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6)',
                          'AppleWebKit/537.36 (KHTML, like Gecko)',
-                         'Chrome/57.0.2987.133 Safari/537.36')
+                         'Chrome/67.0.3396.99 Safari/537.36')
   )
 )
 
@@ -116,7 +119,8 @@ kDefaultParams = list(
   'BRef' = list(
     TeamID = 'HOU',
     Season = kYear,
-    MeasureType = 'totals'
+    MeasureType = 'totals',
+    PlayerID = 'j/jamesle01'
   )
 )
 

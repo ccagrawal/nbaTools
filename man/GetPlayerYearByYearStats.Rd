@@ -4,7 +4,7 @@
 \alias{GetPlayerYearByYearStats}
 \title{Player year over year stats}
 \usage{
-GetPlayerYearByYearStats(split = "Advanced", ...)
+GetPlayerYearByYearStats(split = "Advanced", source = "NBA", ...)
 }
 \value{
 data frame with players yearly stats
