@@ -2,7 +2,7 @@
 % Please edit documentation in R/league_scrape.R
 \name{GetPlayerShootingStats}
 \alias{GetPlayerShootingStats}
-\title{Player shooting stats}
+\title{Player shooting}
 \usage{
 GetPlayerShootingStats(...)
 }
@@ -10,7 +10,7 @@ GetPlayerShootingStats(...)
 data frame with shooting stats for all players
 }
 \description{
-Player shooting stats
+Player shooting
 }
 \examples{
 # GetPlayerShootingStats(SeasonType = 'Playoffs')

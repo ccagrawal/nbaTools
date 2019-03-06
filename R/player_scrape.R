@@ -132,3 +132,40 @@ GetPlayerShootingSplits <- function(split = 'Areas', ...) {
 
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
+
+#' Player dashboard splits
+#'
+#' @return data frame with players general dashboard splits
+#' @keywords player dashboard splits
+#' @export
+#' @examples
+#' # GetPlayerDashboardSplits(PlayerID = '2544')
+
+GetPlayerDashboardSplits <- function(split = 'Areas', ...) {
+
+  endpoint <- 'playerdashboardbygeneralsplits'
+  referer <- 'player'
+
+  param.keys <- c('DateFrom', 'DateTo', 'GameSegment', 'LastNGames', 'LeagueID', 'Location', 'MeasureType',
+                  'Month', 'OpponentTeamID', 'Outcome', 'PORound', 'PaceAdjust', 'PerMode', 'Period',
+                  'PlayerID', 'PlusMinus', 'Rank', 'Season', 'SeasonSegment', 'SeasonType', 'ShotClockRange',
+                  'Split', 'VsConference', 'VsDivision')
+
+  if (split == 'Overall') {
+    ix <- 1
+  } else if (split == 'Location') {
+    ix <- 2
+  } else if (split == 'Win/Loss') {
+    ix <- 3
+  } else if (split == 'Month') {
+    ix <- 4
+  } else if (split == 'Pre/Post All Star') {
+    ix <- 5
+  } else if (split == 'Starting') {
+    ix <- 6
+  } else if (split == 'Rest') {
+    ix <- 7
+  }
+
+  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
+}

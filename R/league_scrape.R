@@ -80,7 +80,7 @@ GetPlayerStats <- function(source = 'NBA', ...) {
                     'PlayerExperience', 'PlayerPosition', 'PlusMinus', 'Rank', 'Season',
                     'SeasonSegment', 'SeasonType', 'ShotClockRange', 'StarterBench',
                     'TeamID', 'VsConference', 'VsDivision', 'Weight')
-    
+
   } else if (source == 'BRef') {
     endpoint <- 'leagues/NBA_<Season>_<MeasureType>.html'
     referer <- ''
@@ -239,7 +239,7 @@ GetPlayerDefenseStats <- function(...) {
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
 
-#' Player shooting stats
+#' Player shooting
 #'
 #' @return data frame with shooting stats for all players
 #' @keywords player shooting
@@ -264,7 +264,7 @@ GetPlayerShootingStats <- function(...) {
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
 
-#' Team shooting stats
+#' Team shooting
 #'
 #' @return data frame with shooting stats for all teams
 #' @keywords team shooting
@@ -273,6 +273,30 @@ GetPlayerShootingStats <- function(...) {
 #' # GetTeamShootingStats(SeasonType = 'Playoffs')
 
 GetTeamShootingStats <- function(...) {
+
+  endpoint <- 'leaguedashteamptshot'
+  referer <- 'teams/shots-closest-defender'
+  ix <- 1
+
+  param.keys <- c('CloseDefDistRange', 'College', 'Conference', 'DateFrom', 'DateTo', 'Division',
+                  'DraftPick', 'DraftYear', 'DribbleRange', 'GameScope', 'GameSegment', 'GeneralRange',
+                  'Height', 'LastNGames', 'LeagueID', 'Location', 'Month', 'OpponentTeamID', 'Outcome',
+                  'PORound', 'PaceAdjust', 'PerMode', 'Period', 'PlayerExperience', 'PlayerPosition',
+                  'PlusMinus', 'Rank', 'Season', 'SeasonSegment', 'SeasonType', 'ShotClockRange', 'ShotDistRange',
+                  'StarterBench', 'TeamID', 'TouchTimeRange', 'VsConference', 'VsDivision', 'Weight')
+
+  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
+}
+
+#' Team shot location
+#'
+#' @return data frame with shot location stats for all teams
+#' @keywords team shot location
+#' @export
+#' @examples
+#' # GetTeamShotLocationStats(SeasonType = 'Playoffs')
+
+GetTeamShotLocationStats <- function(...) {
 
   endpoint <- 'leaguedashteamshotlocations'
   referer <- 'teams/shooting'
