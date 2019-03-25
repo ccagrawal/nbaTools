@@ -133,15 +133,15 @@ GetPlayerShootingSplits <- function(split = 'Areas', ...) {
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
 
-#' Player dashboard splits
+#' Player dashboard general splits
 #'
-#' @return data frame with players general dashboard splits
+#' @return data frame with players dashboard general splits
 #' @keywords player dashboard splits
 #' @export
 #' @examples
-#' # GetPlayerDashboardSplits(PlayerID = '2544')
+#' # GetPlayerDashboardGeneralSplits(PlayerID = '2544')
 
-GetPlayerDashboardSplits <- function(split = 'Areas', ...) {
+GetPlayerDashboardGeneralSplits <- function(split = 'Areas', ...) {
 
   endpoint <- 'playerdashboardbygeneralsplits'
   referer <- 'player'
@@ -165,6 +165,39 @@ GetPlayerDashboardSplits <- function(split = 'Areas', ...) {
     ix <- 6
   } else if (split == 'Rest') {
     ix <- 7
+  }
+
+  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
+}
+
+#' Player dashboard game splits
+#'
+#' @return data frame with players dashboard game splits
+#' @keywords player dashboard splits
+#' @export
+#' @examples
+#' # GetPlayerDashboardGameSplits(PlayerID = '2544')
+
+GetPlayerDashboardGameSplits <- function(split = 'Areas', ...) {
+
+  endpoint <- 'playerdashboardbygamesplits'
+  referer <- 'player'
+
+  param.keys <- c('DateFrom', 'DateTo', 'GameSegment', 'LastNGames', 'LeagueID', 'Location', 'MeasureType',
+                  'Month', 'OpponentTeamID', 'Outcome', 'PORound', 'PaceAdjust', 'PerMode', 'Period',
+                  'PlayerID', 'PlusMinus', 'Rank', 'Season', 'SeasonSegment', 'SeasonType', 'ShotClockRange',
+                  'Split', 'VsConference', 'VsDivision')
+
+  if (split == 'Overall') {
+    ix <- 1
+  } else if (split == 'Half') {
+    ix <- 2
+  } else if (split == 'Period') {
+    ix <- 3
+  } else if (split == 'Score Margin') {
+    ix <- 4
+  } else if (split == 'Actual Margin') {
+    ix <- 5
   }
 
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
