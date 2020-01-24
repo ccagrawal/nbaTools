@@ -4,7 +4,7 @@
 \alias{GetPlayTypeStats}
 \title{Play Type Stats}
 \usage{
-GetPlayTypeStats(type = "player", ...)
+GetPlayTypeStats(...)
 }
 \value{
 data frame with play type stats for all players or all teams

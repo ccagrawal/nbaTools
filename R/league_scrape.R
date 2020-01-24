@@ -82,11 +82,18 @@ GetPlayerStats <- function(source = 'NBA', ...) {
                     'TeamID', 'VsConference', 'VsDivision', 'Weight')
 
   } else if (source == 'BRef') {
-    endpoint <- 'leagues/NBA_<Season>_<MeasureType>.html'
+    endpoint <- '<SeasonType>/NBA_<Season>_<MeasureType>.html'
     referer <- ''
     ix <- 1
 
-    param.keys <- c('Season', 'MeasureType')
+    param.keys <- c('Season', 'MeasureType', 'SeasonType')
+
+  } else if (source == 'PBP') {
+    endpoint <- 'get-totals/nba'
+    referer <- 'totals/nba'
+    ix <- 1
+
+    param.keys <- c('Season', 'SeasonType', 'Type')
   }
 
   return(GetData(endpoint, referer, ix, param.keys, source, ...))
@@ -199,20 +206,16 @@ GetTrackingStats <- function(...) {
 #' @examples
 #' # GetPlayTypeStats(category = 'Isolation')
 
-GetPlayTypeStats <- function(type = 'player', ...) {
+GetPlayTypeStats <- function(...) {
 
-  if (type == 'team') {
-    endpoint <- 'team/'
-    referer <- 'teams/transition'
-  } else {
-    endpoint <- 'player/'
-    referer <- 'players/transition'
-  }
-
+  endpoint <- 'synergyplaytypes'
+  referer <- 'teams/isolation'
   ix <- 1
-  param.keys <- c('category', 'limit', 'names', 'q', 'season', 'seasonType')
 
-  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA.Synergy', ...))
+  param.keys <- c('LeagueID', 'PerMode', 'PlayType', 'PlayerOrTeam', 'SeasonType', 'SeasonYear',
+                  'TypeGrouping')
+
+  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
 
 #' Defense Stats
@@ -300,7 +303,7 @@ GetTeamShotLocationStats <- function(...) {
 
   endpoint <- 'leaguedashteamshotlocations'
   referer <- 'teams/shooting'
-  ix <- 1
+  ix <- NULL
 
   param.keys <- c('Conference', 'DateFrom', 'DateTo', 'DistanceRange', 'Division', 'GameScope',
                   'GameSegment', 'LastNGames', 'LeagueID', 'Location', 'MeasureType', 'Month',

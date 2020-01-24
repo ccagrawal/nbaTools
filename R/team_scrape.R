@@ -129,6 +129,25 @@ GetTeamPlayerDashboard <- function(...) {
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
 
+#' Team player stats
+#'
+#' @return data frame with stats for players on a team
+#' @keywords player team
+#' @export
+#' @examples
+#' # GetTeamRoster('TeamID' = '1610612745')
+
+GetTeamRoster <- function(...) {
+
+  endpoint <- 'commonteamroster'
+  referer <- 'team'
+  ix <- 1
+
+  param.keys <- c('LeagueID', 'Season', 'TeamID')
+
+  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
+}
+
 #' Get Team Logo
 #'
 #' @param team.id Team ID from ESPN (e.g. 'hou')
@@ -171,4 +190,59 @@ GetTeamHistory <- function(source = 'BRef', ...) {
   }
 
   return(GetData(endpoint, referer, ix, param.keys, source, ...))
+}
+
+#' WOWY Combinations
+#'
+#' @return data frame with wowy combinations (e.g. Steph on KD off)
+#' @keywords wowy
+#' @export
+#' @examples
+#' # GetWOWYCombinations(TeamID = 'HOU')
+
+GetWOWYCombinations <- function(...) {
+
+  endpoint <- 'get-wowy-combination-stats/nba'
+  referer <- 'wowy-combos/nba'
+  ix <- 'results'
+
+  param.keys <- c('TeamId', 'Season', 'SeasonType', 'PlayerIds')
+
+  return(GetData(endpoint, referer, ix, param.keys, source = 'PBP', ...))
+}
+
+#' WOWY Stats
+#'
+#' @return data frame with wowy stats (e.g. Steph on KD off)
+#' @keywords wowy
+#' @export
+#' @examples
+#' # GetWOWYStats(TeamID = 'HOU')
+
+GetWOWYStats <- function(...) {
+
+  endpoint <- 'get-wowy-stats/nba'
+  referer <- 'wowy/nba'
+  ix <- 1
+
+  param.keys <- c('0Exactly1OnFloor', 'TeamId', 'Season', 'SeasonType', 'Type', 'Opponent')
+
+  return(GetData(endpoint, referer, ix, param.keys, source = 'PBP', ...))
+}
+
+#' Possession Finder
+#'
+#' @return data frame with possessions
+#' @keywords possessions
+#' @export
+#' @examples
+#' # GetTeamPossessions(TeamID = 'HOU')
+
+GetTeamPossessions <- function(ix = 'team_results', ...) {
+
+  endpoint <- 'get-possessions/nba'
+  referer <- 'possession-finder/nba'
+  param.keys <- c('TeamId', 'Season', 'SeasonType', 'OffDef', 'StartType', 'Period')
+
+  return(GetData(endpoint, referer, ix, param.keys, source = 'PBP', ...))
 }

@@ -8,8 +8,12 @@ GenerateParams <- function(param.keys, source = 'NBA', ...) {
 
   for (k in names(kwargs)) {
 
-    if ((k == 'Season') & (source == 'NBA')) {
-      params[[k]] <- YearToSeason(kwargs[[k]])
+    if ((k %in% c('Season', 'SeasonYear')) & (source %in% c('NBA', 'PBP'))) {
+      if (length(kwargs[[k]]) > 1) {
+        params[[k]] = paste(YearToSeason(kwargs[[k]]), collapse = ',')
+      } else {
+        params[[k]] <- YearToSeason(kwargs[[k]])
+      }
 
     } else if (k == 'season') {
       params[[k]] <- kwargs[[k]] - 1
@@ -21,10 +25,19 @@ GenerateParams <- function(param.keys, source = 'NBA', ...) {
 
       params[['gameDate']] <- kwargs[[k]]
 
+    } else if ((k == 'SeasonType') & (source == 'BRef')) {
+      if (kwargs[[k]] == 'Regular Season') {
+        params[[k]] <- 'leagues'
+      } else if (kwargs[[k]] == 'Playoffs') {
+        params[[k]] <- 'playoffs'
+      }
+
+    } else if ((k == 'PlayerIds') & (length(kwargs[[k]]) > 1)) {
+      params[[k]] = paste(kwargs[[k]], collapse = ',')
+
     } else {
       params[[k]] <- kwargs[[k]]
     }
-
   }
 
   return(params)
@@ -58,11 +71,23 @@ ScrapeContent <- function(endpoint, params, referer, source = 'NBA') {
 
     content <- gsub('<!--([(?!-->)]*)', '\\1', content)
     return(content)
+  } else if (source == 'PBP') {
+    headers['Referer'] <- gsub('%referer%', referer, headers['Referer'])
+
+    request <- GET(
+      url = gsub('%endpoint%', endpoint, kBaseURL[[source]]),
+      query = params,
+      do.call(add_headers, headers)
+    )
+
+    return(content(request, 'parsed'))
+
   }
 }
 
 #' @importFrom utils type.convert
 #' @importFrom XML readHTMLTable
+#' @importFrom dplyr bind_rows
 
 ContentToDataFrame <- function(content, ix, source = 'NBA') {
   options(stringsAsFactors = FALSE)
@@ -132,6 +157,25 @@ ContentToDataFrame <- function(content, ix, source = 'NBA') {
 
     if (sum(dup.headers) > 0) {
       data <- data[-which(colSums(dup.headers) > 1), ]
+    }
+
+    data <- data[, colSums(is.na(data)) < nrow(data)]
+
+  } else if (source == 'PBP') {
+
+    if (!is.null(ix)) {
+      content <- content[[ix]]
+    } else if ('multi_row_table_data' %in% names(content)) {
+      content <- content[['multi_row_table_data']]
+    } else {
+      content <- content[['results']]
+    }
+
+    if (class(content[[1]]) == 'list') {
+      content <- lapply(content, Filter, f = Negate(is.null))
+      data <- bind_rows(lapply(content, as.data.frame.list))
+    } else {
+      return(content)
     }
   }
 

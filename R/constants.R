@@ -4,8 +4,8 @@ kSeason <- YearToSeason(kYear)
 
 kBaseURL <- list(
   'NBA' = 'http://stats.nba.com/stats/%endpoint%',
-  'NBA.Synergy' = 'http://stats-prod.nba.com/wp-json/statscms/v1/synergy/%endpoint%',
-  'BRef' = 'http://www.basketball-reference.com/%endpoint%'
+  'BRef' = 'http://www.basketball-reference.com/%endpoint%',
+  'PBP' = 'https://api.pbpstats.com/%endpoint%'
 )
 
 kHeaders <- list(
@@ -15,15 +15,9 @@ kHeaders <- list(
     'Referer' = 'http://stats.nba.com/%referer%/',
     'User-Agent' = paste('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6)',
                          'AppleWebKit/537.36 (KHTML, like Gecko)',
-                         'Chrome/67.0.3396.99 Safari/537.36')
-  ),
-  'NBA.Synergy' = list(
-    'Accept' = 'application/json, text/plain, */*',
-    'Accept-Language' = 'en-US,en;q=0.8,af;q=0.6',
-    'Referer' = 'http://stats.nba.com/%referer%/',
-    'User-Agent' = paste('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6)',
-                         'AppleWebKit/537.36 (KHTML, like Gecko)',
-                         'Chrome/67.0.3396.99 Safari/537.36')
+                         'Chrome/67.0.3396.99 Safari/537.36'),
+    'x-nba-stats-origin' = 'stats',
+    'x-nba-stats-token' = 'true'
   ),
   'BRef' = list(
     'Accept' = 'application/json, text/plain, */*',
@@ -32,6 +26,14 @@ kHeaders <- list(
     'User-Agent' = paste('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6)',
                          'AppleWebKit/537.36 (KHTML, like Gecko)',
                          'Chrome/67.0.3396.99 Safari/537.36')
+  ),
+  'PBP' = list(
+    'Accept' = 'application/json, text/plain, */*',
+    'Accept-Language' = 'en-US,en;q=0.8,af;q=0.6',
+    'Referer' = 'https://www.pbpstats.com/%referer%/',
+    'User-Agent' = paste('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6)',
+                         'AppleWebKit/537.36 (KHTML, like Gecko)',
+                         'Chrome/72.0.3626.121 Safari/537.36')
   )
 )
 
@@ -84,6 +86,7 @@ kDefaultParams = list(
     PlayerPosition = '',
     PlayerScope = 'All Players',
     PlayoffRound = 0,
+    PlayType = 'Isolation',
     PlusMinus = 'N',
     PointDiff = 5,
     PtMeasureType = 'SpeedDistance',
@@ -95,6 +98,7 @@ kDefaultParams = list(
     Season = kSeason,
     SeasonSegment = '',
     SeasonType = 'Regular Season',
+    SeasonYear = kSeason,
     ShotClockRange = '',
     ShotDistRange = '',
     Sorter = 'DATE',
@@ -104,6 +108,7 @@ kDefaultParams = list(
     StatCategory = 'PTS',
     TeamID = 0,
     TouchTimeRange = '',
+    TypeGrouping = 'offensive',
     VsConference = '',
     VsDivision = '',
     Weight = ''
@@ -121,6 +126,15 @@ kDefaultParams = list(
     Season = kYear,
     MeasureType = 'totals',
     PlayerID = 'j/jamesle01'
+  ),
+  'PBP' = list(
+    OffDef = 'Offense',
+    Season = kSeason,
+    SeasonType = 'Regular Season',
+    StarterState = '5v5',
+    StartType = 'All',
+    TeamID = '1610612745',
+    Type = 'Player'
   )
 )
 
